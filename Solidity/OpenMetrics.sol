@@ -45,7 +45,8 @@ contract OpenMetrics {
             approver: address(0), 
             status: Status.None, 
             cid: _cid, 
-            checksum: _checksum});
+            checksum: _checksum
+            });
         }
     }
 
@@ -53,9 +54,20 @@ contract OpenMetrics {
         Metric memory prev = Metrics[_id];
 
         if(true) { // @! checks
-            // @! new metric.
+            Metrics[_id] = Metric({
+                creator: msg.sender, 
+                approver: address(0), 
+                status: Status.None, 
+                cid: _cid, 
+                checksum: _checksum
+            });
         }
-        
+    }
+
+    function deleteMetric(uint256 _id) public {
+        if(true) { // @! checks
+            delete(Metrics[_id]);
+        }
     }
 
     function addApproved(address approver) public {

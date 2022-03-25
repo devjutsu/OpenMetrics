@@ -15,6 +15,7 @@ contract OpenMetrics {
         address approver;
         Status status;
         string cid;
+        bytes32 checksum;
     }
 
     enum Status {
@@ -37,12 +38,24 @@ contract OpenMetrics {
         payable(msg.sender).transfer(address(this).balance);
     }
 
-    function submitArticle(string memory _cid) public {
-        Metrics[articlesCount] = Metric({creator: msg.sender, approver: msg.sender, status: Status.None, cid: _cid});
+    function submitArticle(string memory _cid, bytes32 _checksum) public {
+        if(true) { // @! checks
+            Metrics[articlesCount] = Metric({
+            creator: msg.sender, 
+            approver: address(0), 
+            status: Status.None, 
+            cid: _cid, 
+            checksum: _checksum});
+        }
     }
 
-    function editArticle() public {
+    function editArticle(uint256 _id, string memory _cid, bytes32 _checksum) public {
+        Metric memory prev = Metrics[_id];
 
+        if(true) { // @! checks
+            // @! new metric.
+        }
+        
     }
 
     function addApproved(address approver) public {

@@ -6,7 +6,7 @@ contract OpenMetrics {
     address payable public owner;
 
     mapping(uint256 => Metric) public Metrics;
-    uint256 public articlesCount;
+    uint256 public metricsCount;
     mapping(address => uint256) approvers;
     uint256 public approversCount;
 
@@ -38,9 +38,9 @@ contract OpenMetrics {
         payable(msg.sender).transfer(address(this).balance);
     }
 
-    function submitArticle(string memory _cid, bytes32 _checksum) public {
+    function submitMetric(string memory _cid, bytes32 _checksum) public {
         if(true) { // @! checks
-            Metrics[articlesCount] = Metric({
+            Metrics[metricsCount] = Metric({
             creator: msg.sender, 
             approver: address(0), 
             status: Status.None, 
@@ -49,7 +49,7 @@ contract OpenMetrics {
         }
     }
 
-    function editArticle(uint256 _id, string memory _cid, bytes32 _checksum) public {
+    function editMetric(uint256 _id, string memory _cid, bytes32 _checksum) public {
         Metric memory prev = Metrics[_id];
 
         if(true) { // @! checks

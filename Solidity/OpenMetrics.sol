@@ -6,12 +6,15 @@ contract OpenMetrics {
     address payable public owner;
 
     mapping(uint256 => Metric) public Metrics;
+    
+
     uint256 public metricsCount;
     mapping(address => uint256) approvers;
     uint256 public approversCount;
 
     struct Metric {
         address creator;
+        address editor;
         address approver;
         Status status;
         string cid;
@@ -42,6 +45,7 @@ contract OpenMetrics {
         if(true) { // @! checks
             Metrics[metricsCount] = Metric({
             creator: msg.sender, 
+            editor: msg.sender,
             approver: address(0), 
             status: Status.None, 
             cid: _cid, 
@@ -55,7 +59,8 @@ contract OpenMetrics {
 
         if(true) { // @! checks
             Metrics[_id] = Metric({
-                creator: msg.sender, 
+                creator: prev.creator, 
+                editor: msg.sender,
                 approver: address(0), 
                 status: Status.None, 
                 cid: _cid, 

@@ -14,6 +14,7 @@ contract OpenMetrics {
         address creator;
         address approver;
         Status status;
+        string cid;
     }
 
     enum Status {
@@ -36,8 +37,8 @@ contract OpenMetrics {
         payable(msg.sender).transfer(address(this).balance);
     }
 
-    function submitArticle() public {
-        
+    function submitArticle(string memory _cid) public {
+        Metrics[articlesCount] = Metric({creator: msg.sender, approver: msg.sender, status: Status.None, cid: _cid});
     }
 
     function editArticle() public {
@@ -54,6 +55,6 @@ contract OpenMetrics {
 
     function editApprover(address fromAddress, address toAddress) public {
         approvers[fromAddress] = 0;
-        approvers[toAddress] = 0;
+        approvers[toAddress] = 1;
     }
 }

@@ -5,11 +5,10 @@ pragma solidity ^0.8.10;
 contract OpenMetrics {
     address payable public owner;
 
-    address[] approvers;
-
     mapping(uint256 => Metric) public Metrics;
     uint256 public articlesCount;
-    
+    mapping(address => uint256) approvers;
+    uint256 public approversCount;
 
     struct Metric {
         address creator;
@@ -46,10 +45,15 @@ contract OpenMetrics {
     }
 
     function addApproved(address approver) public {
-
+        approvers[approver] = 1;
     }
 
-    function removeApprover() public {
+    function removeApprover(address approver) public {
+        approvers[approver] = 0;
+    }
 
+    function editApprover(address fromAddress, address toAddress) public {
+        approvers[fromAddress] = 0;
+        approvers[toAddress] = 0;
     }
 }

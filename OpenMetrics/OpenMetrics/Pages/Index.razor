@@ -1,6 +1,11 @@
 ﻿@page "/"
+@using Blazored.Toast.Services
 @using MetaMask.Blazor
+@using OpenMetrics.Services
 @inject MetaMaskService Meta
+@inject AppState AppState
+@inject ClientConfig CFG
+@inject IToastService Toast
 @inject IJSRuntime JS
 
 <PageTitle>Index</PageTitle>
@@ -8,6 +13,7 @@
 @code {
     bool Spinning = false;
     bool HasMetaMask = false;
+    bool ProperChain = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,11 +37,11 @@
                 if (!await Meta.IsSiteConnected())
                     await Meta.ConnectMetaMask();
                 var userId = await Meta.GetSelectedAddress();
+                await GetSelectedNetwork();
 
-                //await AppState.Login(this, user, newToken);
+                await AppState.Login(this, userId);
 
 
-                //await GetSelectedNetwork();
             }
             catch (Exception ex)
             {
@@ -43,5 +49,23 @@
             }
         }
         Spinning = false;
+    }
+
+    public async Task GetSelectedNetwork()
+    {
+        var chainInfo = await Meta.GetSelectedChain();
+
+        AppState.SetChain(this, chainInfo.chainId);
+        Console.WriteLine($"ChainID: {AppState.ChainId}");
+        StateHasChanged();
+
+        if (ProperChain)
+        {
+            Console.WriteLine($"Authenticated on: {NetworksList.Networks[AppState.ChainId]}");
+        }
+        else
+        {
+            Toast.ShowWarning($"Please, connect to chain: {NetworksList.Networks[CFG.NetworkId]}");
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Blazored.Toast.Services
 @using MetaMask.Blazor
+@using OpenMetrics.Components
 @using OpenMetrics.Services
 @inject MetaMaskService Meta
 @inject AppState AppState
@@ -9,6 +10,11 @@
 @inject IJSRuntime JS
 
 <PageTitle>Index</PageTitle>
+
+@if (@Spinning)
+{
+    <Spinner />
+}
 
 @code {
     bool Spinning = false;

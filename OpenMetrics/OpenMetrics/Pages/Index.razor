@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Blazored.Toast.Services
 @using MetaMask.Blazor
+@using MetaMask.Blazor.Enums
 @using OpenMetrics.Components
 @using OpenMetrics.Services
 @inject MetaMaskService Meta
@@ -47,12 +48,33 @@ else
 @code {
     bool Spinning = false;
     bool HasMetaMask = false;
-    bool ProperChain = true;
+    bool ProperChain => AppState.ChainId == CFG.NetworkId;
     string NeededChain => NetworksList.Networks[CFG.NetworkId];
 
     protected override async Task OnInitializedAsync()
     {
         HasMetaMask = await Meta.HasMetaMask();
+        if (HasMetaMask)
+            await Meta.ListenToEvents();
+
+        bool isSiteConnected = await Meta.IsSiteConnected();
+        if (isSiteConnected)
+        {
+            await GetSelectedNetwork();
+        }
+
+        MetaMaskService.AccountChangedEvent += MetaMaskService_AccountChangedEvent;
+        MetaMaskService.ChainChangedEvent += MetaMaskService_ChainChangedEvent;
+    }
+
+    private async Task MetaMaskService_ChainChangedEvent((long, Chain) arg)
+    {
+        await GetSelectedNetwork();
+    }
+
+    private async Task MetaMaskService_AccountChangedEvent(string arg)
+    {
+        await Authenticate();
     }
 
     async Task Authenticate()
@@ -82,10 +104,13 @@ else
             }
         }
         Spinning = false;
+
+        Console.WriteLine($"{AppState.ChainId} ==? {CFG.NetworkId}");
     }
 
     public async Task GetSelectedNetwork()
     {
+        Spinning = true;
         var chainInfo = await Meta.GetSelectedChain();
 
         AppState.SetChain(this, chainInfo.chainId);
@@ -100,6 +125,7 @@ else
         {
             Toast.ShowWarning($"Please, connect to chain: {NetworksList.Networks[CFG.NetworkId]}");
         }
+        Spinning = false;
     }
 
     async Task SwitchChain()
@@ -108,7 +134,7 @@ else
         await JS.InvokeVoidAsync("switchChain", toChain);
     }
 
-        // ----
+    // ----
     protected override void OnInitialized()
     {
         AppState.Statechanged += async (Source, Property) => await AppState_StateChanged(Source, Property);

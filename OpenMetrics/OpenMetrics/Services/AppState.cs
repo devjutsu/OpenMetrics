@@ -5,7 +5,7 @@ namespace OpenMetrics.Services
 {
     public class AppState
     {
-        public long ChainId { get; private set; }
+        public long ChainId { get; private set; } = 1;
         public string AccountId {get; private set;}
         public bool IsAuthenticated => AccountId != null && !string.IsNullOrWhiteSpace(AccountId);
 

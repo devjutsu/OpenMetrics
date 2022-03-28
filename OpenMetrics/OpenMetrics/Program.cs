@@ -15,6 +15,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 long netId = 1;
 long.TryParse(builder.Configuration["NetworkId"], out netId);
+
 var config = new ClientConfig()
 {
     ApiUrl = builder.Configuration["ApiUrl"] ?? "",

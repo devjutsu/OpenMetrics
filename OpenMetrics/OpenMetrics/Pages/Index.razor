@@ -1,9 +1,49 @@
 ﻿@page "/"
+@using MetaMask.Blazor
+@inject MetaMaskService Meta
+@inject IJSRuntime JS
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+@code {
+    bool Spinning = false;
+    bool HasMetaMask = false;
 
-Welcome to your new app.
+    protected override async Task OnInitializedAsync()
+    {
+        await Authenticate();
+    }
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    async Task Authenticate()
+    {
+        Console.WriteLine("Authenticating...");
+        Spinning = true;
+        if (!await Meta.HasMetaMask())
+        {
+            Console.WriteLine("Has no MetaMask");
+            HasMetaMask = false;
+            StateHasChanged();
+        }
+        else
+        {
+            try
+            {
+                if (!await Meta.IsSiteConnected())
+                    await Meta.ConnectMetaMask();
+                var userId = await Meta.GetSelectedAddress();
+
+
+                var address = await Meta.GetSelectedAddress();
+                //await AppState.Login(this, user, newToken);
+
+
+                //await GetSelectedNetwork();
+            }
+            catch (Exception ex)
+            {
+                //Toast.ShowError($"Auth failed. Please, check your wallet");
+            }
+        }
+        Spinning = false;
+    }
+}

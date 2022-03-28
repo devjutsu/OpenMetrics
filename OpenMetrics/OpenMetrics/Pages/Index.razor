@@ -8,6 +8,7 @@
 @inject ClientConfig CFG
 @inject IToastService Toast
 @inject IJSRuntime JS
+@implements IDisposable
 
 <PageTitle>Index</PageTitle>
 
@@ -16,14 +17,42 @@
     <Spinner />
 }
 
+@if (!AppState.IsAuthenticated)
+{
+    <div>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary" @onclick="(() => Authenticate())" disabled="@(!HasMetaMask)">
+                Authenticate
+            </button>
+        </div>
+
+        @if (!HasMetaMask)
+        {
+            <div class="d-flex justify-content-center vertical-space darktext">
+                Please authenticate with <span>&nbsp;</span> <a href="https://metamask.io" target="_blank"> MetaMask </a>.
+            </div>
+        }
+    </div>
+}
+else if (!ProperChain)
+{
+    <div>Please, select <span style="color: #5a349aff; font-weight:bold">@NeededChain</span> chain</div>
+    <button class="btn btn-primary" @onclick="@(() => SwitchChain())">Open MetaMask</button>
+}
+else
+{
+    <div>ok</div>
+}
+
 @code {
     bool Spinning = false;
     bool HasMetaMask = false;
     bool ProperChain = true;
+    string NeededChain => NetworksList.Networks[CFG.NetworkId];
 
     protected override async Task OnInitializedAsync()
     {
-        await Authenticate();
+        HasMetaMask = await Meta.HasMetaMask();
     }
 
     async Task Authenticate()
@@ -33,7 +62,7 @@
         if (!await Meta.HasMetaMask())
         {
             Console.WriteLine("Has no MetaMask");
-            HasMetaMask = false;
+            HasMetaMask = await Meta.HasMetaMask();
             StateHasChanged();
         }
         else
@@ -44,14 +73,12 @@
                     await Meta.ConnectMetaMask();
                 var userId = await Meta.GetSelectedAddress();
                 await GetSelectedNetwork();
-
+                HasMetaMask = true;
                 await AppState.Login(this, userId);
-
-
             }
             catch (Exception ex)
             {
-                //Toast.ShowError($"Auth failed. Please, check your wallet");
+                Toast.ShowError($"Auth failed. Please, check your wallet");
             }
         }
         Spinning = false;
@@ -73,5 +100,27 @@
         {
             Toast.ShowWarning($"Please, connect to chain: {NetworksList.Networks[CFG.NetworkId]}");
         }
+    }
+
+    async Task SwitchChain()
+    {
+        var toChain = "0x" + CFG.NetworkId.ToString("X");
+        await JS.InvokeVoidAsync("switchChain", toChain);
+    }
+
+        // ----
+    protected override void OnInitialized()
+    {
+        AppState.Statechanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+
+    private async Task AppState_StateChanged(ComponentBase source, string Property)
+    {
+        if (source != this) await InvokeAsync(StateHasChanged);
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.Statechanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
     }
 }

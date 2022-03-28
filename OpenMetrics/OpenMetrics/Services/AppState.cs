@@ -32,6 +32,7 @@ namespace OpenMetrics.Services
 
         public async Task Login(ComponentBase source, string address)
         {
+            AccountId = address;
             NotifyStateChanged(source, "CurrentUser");
         }
 

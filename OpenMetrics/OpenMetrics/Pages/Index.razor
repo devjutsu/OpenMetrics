@@ -104,8 +104,6 @@ else
             }
         }
         Spinning = false;
-
-        Console.WriteLine($"{AppState.ChainId} ==? {CFG.NetworkId}");
     }
 
     public async Task GetSelectedNetwork()
@@ -115,7 +113,6 @@ else
 
         AppState.SetChain(this, chainInfo.chainId);
         Console.WriteLine($"ChainID: {AppState.ChainId}");
-        StateHasChanged();
 
         if (ProperChain)
         {
@@ -126,6 +123,7 @@ else
             Toast.ShowWarning($"Please, connect to chain: {NetworksList.Networks[CFG.NetworkId]}");
         }
         Spinning = false;
+        StateHasChanged();
     }
 
     async Task SwitchChain()

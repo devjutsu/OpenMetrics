@@ -2,7 +2,7 @@
 {
     @foreach (var metric in Metrics)
     {
-        <div>@metric.Id @metric.Text</div>
+        <div>@metric.Id @metric.Cid</div>
     }
 }
 
@@ -10,6 +10,4 @@
 @code {
     [Parameter]
     public List<Metric> Metrics { get; set; }
-
-
 }

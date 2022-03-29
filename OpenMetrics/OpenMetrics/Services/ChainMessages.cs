@@ -13,11 +13,12 @@ public class MetricsCount : FunctionMessage
 {
 }
 
-//[Function("checkMints", "uint256")]
-//public class CheckMintsFunction : FunctionMessage
-//{
-//    [Parameter("address", "_player", 1)] public string Player { get; set; }
-//}
+[Function("submitMetric", "uint256")]
+public class CheckMintsFunction : FunctionMessage
+{
+    [Parameter("string", "_cid", 1)] public string Cid { get; set; }
+    [Parameter("bytes32", "_checksum", 1)] public string Checksum { get; set; }
+}
 
 //[Function("checkProfit", "uint256")]
 //public class CheckProfitFunction : FunctionMessage

@@ -55,13 +55,7 @@ else
         <AddMetricComponent DoneAdding=DoneAdding />
     }
 
-    @if(Metrics != null && Metrics.Count > 0)
-    {
-        @foreach(var metric in Metrics)
-        {
-            <div>@metric.Id @metric.Text</div>
-        }
-    }
+    <ListMetricsComponent Metrics=Metrics />
 }
 
 @code {

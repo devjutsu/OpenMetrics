@@ -8,7 +8,7 @@
 @inject MetaMaskService Meta
 @inject AppState AppState
 @inject ClientConfig CFG
-@inject IChain Chain
+@inject IChain Blockchain
 @inject IToastService Toast
 @inject IJSRuntime JS
 @implements IDisposable
@@ -91,7 +91,7 @@ else
             await AppState.Login(this, userId);
         }
 
-        MetricsCount = (int)(await Chain.MetricsCount());
+        MetricsCount = (int)(await Blockchain.MetricsCount());
 
     }
 
@@ -169,7 +169,12 @@ else
     {
         try
         {
-            Metrics.Add(metric);
+            var added = await Blockchain.SubmitMetric(metric);
+            Console.WriteLine($"Added: {added}");
+            if(!string.IsNullOrEmpty(added))
+            {
+                Metrics.Add(metric);
+            }
             AddingMetrics = false;
         }
         catch(Exception ex)

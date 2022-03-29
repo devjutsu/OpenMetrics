@@ -1,17 +1,19 @@
 ﻿<div>EditMetricComponent</div>
 
+<input type="text" @bind-value=@Cid />
+
 <button class="btn btn-primary" @onclick="@(() => Add())">Add Metric</button>
 
 @code {
     [Parameter]
     public EventCallback<Metric> DoneAdding { get; set; }
+    string Cid { get; set; }
 
     async Task Add()
     {
         var metric = new Metric()
         {
-            Id = new Random().Next(100000),
-            Cid = "Test"
+            Cid = Cid
         };
         await DoneAdding.InvokeAsync(metric);
     }

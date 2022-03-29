@@ -15,7 +15,7 @@ namespace OpenMetrics.Services
     public interface IChain
     {
         Task<BigInteger> MetricsCount();
-        Task<string> SubmitMetric();
+        Task<string> SubmitMetric(Metric metric);
     }
 
     public class ChainClient : IChain
@@ -62,7 +62,7 @@ namespace OpenMetrics.Services
             return 0;
         }
 
-        public async Task<string> SubmitMetric(string cid)
+        public async Task<string> SubmitMetric(Metric metric)
         {
             var hash = "0x1234567812345678123456781234567812345678123456781234567812345678";
 
@@ -80,9 +80,9 @@ namespace OpenMetrics.Services
                     new Parameter(type: "bytes32", name: "_checksum", order: 2)
                 };
 
+                Console.WriteLine("CALL SUBMIT");
 
-
-                var values = new object[] { cid, hash.HexToByteArray() };
+                var values = new object[] { metric.Cid, hash.HexToByteArray() };
 
                 var receipt = await _meta.SendTransactionAndWaitForReceipt(web3.Client,
                                                             ContractFunctionNames.SubmitMetricFunction,
@@ -92,11 +92,6 @@ namespace OpenMetrics.Services
                                                             values);
 
                 return receipt.TransactionHash.ToString();
-
-                //var queryHandler = web3.Eth.GetContractQueryHandler<MetricsCount>();
-                //var resp = await queryHandler
-                //                    .QueryAsync<BigInteger>(_config.ContractAddress, args)
-                //                    .ConfigureAwait(false);
             }
             catch (Exception ex)
             {

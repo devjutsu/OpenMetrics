@@ -5,9 +5,8 @@
         public string ApiUrl { get; set; }
         public long NetworkId { get; set; }
 
-        //public string ContractAddress { get; set; }
-        //public string RpcUrl { get; set; }
-        //public string ChainId { get; set; }
+        public string ContractAddress { get; set; }
+        public string RpcUrl { get; set; }
     }
 
     public static class NetworksList

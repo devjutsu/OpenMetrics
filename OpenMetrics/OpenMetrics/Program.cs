@@ -20,6 +20,8 @@ var config = new ClientConfig()
 {
     ApiUrl = builder.Configuration["ApiUrl"] ?? "",
     NetworkId = netId,
+    ContractAddress = builder.Configuration["ContractAddress"],
+    RpcUrl = builder.Configuration["RpcUrl"],
 };
 
 builder.Services.AddSingleton<ClientConfig>(config);

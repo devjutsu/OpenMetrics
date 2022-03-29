@@ -1,4 +1,4 @@
-﻿<h3>EditMetricComponent</h3>
+﻿<div>EditMetricComponent</div>
 
 <button class="btn btn-primary" @onclick="@(() => Add())">Add Metric</button>
 
@@ -13,6 +13,6 @@
             Id = new Random().Next(100000),
             Text = "Test"
         };
-        await DoneAdding.InvokeAsync();
+        await DoneAdding.InvokeAsync(metric);
     }
 }

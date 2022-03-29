@@ -55,6 +55,13 @@ else
         <AddMetricComponent DoneAdding=DoneAdding />
     }
 
+    @if(Metrics != null && Metrics.Count > 0)
+    {
+        @foreach(var metric in Metrics)
+        {
+            <div>@metric.Id @metric.Text</div>
+        }
+    }
 }
 
 @code {
@@ -166,8 +173,15 @@ else
 
     async Task DoneAdding(Metric metric)
     {
-        Metrics.Add(metric);
-        AddingMetrics = false;
+        try
+        {
+            Metrics.Add(metric);
+            AddingMetrics = false;
+        }
+        catch(Exception ex)
+        {
+            Toast.ShowError($"hz: {ex.Message}");
+        }
     }
 
     // ----

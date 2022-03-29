@@ -4,6 +4,7 @@
 @using MetaMask.Blazor.Enums
 @using OpenMetrics.Components
 @using OpenMetrics.Services
+@using OpenMetrics.ViewModels
 @inject MetaMaskService Meta
 @inject AppState AppState
 @inject ClientConfig CFG
@@ -51,7 +52,7 @@ else
 
     @if(AddingMetrics)
     {
-        <EditMetricComponent />
+        <AddMetricComponent DoneAdding=DoneAdding />
     }
 
 }
@@ -63,6 +64,7 @@ else
     string NeededChain => NetworksList.Networks[CFG.NetworkId];
     int MetricsCount = 0;
     bool AddingMetrics = false;
+    List<Metric> Metrics = new List<Metric>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -79,7 +81,17 @@ else
         MetaMaskService.AccountChangedEvent += MetaMaskService_AccountChangedEvent;
         MetaMaskService.ChainChangedEvent += MetaMaskService_ChainChangedEvent;
 
+
+        if (!await Meta.IsSiteConnected())
+            await Meta.ConnectMetaMask();
+        var userId = await Meta.GetSelectedAddress();
+        if(!string.IsNullOrEmpty(userId))
+        {
+            await AppState.Login(this, userId);
+        }
+
         MetricsCount = (int)(await Chain.MetricsCount());
+
     }
 
     private async Task MetaMaskService_ChainChangedEvent((long, Chain) arg)
@@ -127,7 +139,7 @@ else
         var chainInfo = await Meta.GetSelectedChain();
 
         AppState.SetChain(this, chainInfo.chainId);
-        Console.WriteLine($"ChainID: {AppState.ChainId}");
+        Console.WriteLine($"Network id: {AppState.ChainId}");
 
         if (ProperChain)
         {
@@ -150,6 +162,12 @@ else
     async Task OpenAddMetric()
     {
         AddingMetrics = true;
+    }
+
+    async Task DoneAdding(Metric metric)
+    {
+        Metrics.Add(metric);
+        AddingMetrics = false;
     }
 
     // ----

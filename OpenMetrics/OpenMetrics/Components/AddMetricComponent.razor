@@ -1,0 +1,18 @@
+﻿<h3>EditMetricComponent</h3>
+
+<button class="btn btn-primary" @onclick="@(() => Add())">Add Metric</button>
+
+@code {
+    [Parameter]
+    public EventCallback<Metric> DoneAdding { get; set; }
+
+    async Task Add()
+    {
+        var metric = new Metric()
+        {
+            Id = new Random().Next(100000),
+            Text = "Test"
+        };
+        await DoneAdding.InvokeAsync();
+    }
+}

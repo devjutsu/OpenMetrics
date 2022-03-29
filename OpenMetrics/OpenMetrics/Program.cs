@@ -25,6 +25,7 @@ var config = new ClientConfig()
 };
 
 builder.Services.AddSingleton<ClientConfig>(config);
+builder.Services.AddScoped<IChain, ChainClient>();
 builder.Services.AddMetaMaskBlazor();
 builder.Services.AddBlazoredToast();
 builder.Services.AddScoped<AppState>();

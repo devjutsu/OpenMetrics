@@ -70,18 +70,20 @@ a, .btn-link {
         background-color: lightsteelblue;
     }
 
+.menu-item-selected {
+    color: black !important;
+}
 
 
 
-
-    .lds-ripple {
-        display: inline-block;
-        position: absolute;
-        width: 80px;
-        height: 80px;
-        left: calc(50% - 40px);
-        top: calc(50% - 40px);
-    }
+.lds-ripple {
+    display: inline-block;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    left: calc(50% - 40px);
+    top: calc(50% - 40px);
+}
 
     .lds-ripple div {
         position: absolute;

@@ -10,7 +10,7 @@ namespace OpenMetrics.Services
         public bool IsAuthenticated => AccountId != null && !string.IsNullOrWhiteSpace(AccountId);
         public ulong MetricsCount { get; private set; } = 0;
         public bool IsSuperuser => AccountId.ToLower() == "0x47B40160f72C4321E08DE8B95E262e902c991cD3".ToLower();
-        public AppScreenMode ScreenMode { get; private set; } = AppScreenMode.DefaultVerified;
+        public AppScreenMode ScreenMode { get; private set; } = AppScreenMode.Verified;
 
 
         public string AccountToShow()
@@ -59,7 +59,7 @@ namespace OpenMetrics.Services
 
     public enum AppScreenMode
     {
-        DefaultVerified = 0,
+        Verified = 0,
         All = 1,
         Unchecked = 2,
     }

@@ -1,0 +1,33 @@
+﻿@inject AppState AppState
+@implements IDisposable
+
+<div class="d-flex justify-content-center" style="">
+    <a href="#" style="margin: 1rem;" @onclick="@(() => Set(AppScreenMode.Verified))" class="@CssFor(AppScreenMode.Verified)">Verified</a>
+    <a href="#" style="margin: 1rem;" @onclick="@(() => Set(AppScreenMode.Unchecked))" class="@CssFor(AppScreenMode.Unchecked)">Unchecked</a>
+    <a href="#" style="margin: 1rem;" @onclick="@(() => Set(AppScreenMode.All))" class="@CssFor(AppScreenMode.All)">All Metrics</a>
+</div>
+
+@code {
+    string CssFor(AppScreenMode mode) => AppState.ScreenMode == mode ? "menu-item-selected" : string.Empty;
+
+    async Task Set(AppScreenMode mode)
+    {
+        AppState.SetScreenMode(this, mode);
+    }
+
+        // ----
+    protected override void OnInitialized()
+    {
+        AppState.Statechanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+
+    private async Task AppState_StateChanged(ComponentBase source, string Property)
+    {
+        if (source != this) await InvokeAsync(StateHasChanged);
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.Statechanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+}

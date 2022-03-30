@@ -94,12 +94,8 @@ else
         MetricsCount = (ulong)(await Blockchain.MetricsCount());
         if(MetricsCount > 0)
         {
-            //await GetAllMetrics();
-
-            var item = await Blockchain.GetMetric(1);
-            Metrics.Add(item);
+            await GetAllMetrics();
         }
-
     }
 
     private async Task MetaMaskService_ChainChangedEvent((long, Chain) arg)
@@ -192,7 +188,7 @@ else
 
     async Task GetAllMetrics()
     {
-        for(ulong i = 0; i < MetricsCount; i++)
+        for(ulong i = 1; i <= MetricsCount; i++)
         {
             var item = await Blockchain.GetMetric(i);
             Metrics.Add(item);

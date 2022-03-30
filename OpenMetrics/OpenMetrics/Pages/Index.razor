@@ -63,7 +63,7 @@ else
     bool HasMetaMask = false;
     bool ProperChain => AppState.ChainId == CFG.NetworkId;
     string NeededChain => NetworksList.Networks[CFG.NetworkId];
-    int MetricsCount = 0;
+    ulong MetricsCount = 0;
     bool AddingMetrics = false;
     List<Metric> Metrics = new List<Metric>();
 
@@ -91,7 +91,14 @@ else
             await AppState.Login(this, userId);
         }
 
-        MetricsCount = (int)(await Blockchain.MetricsCount());
+        MetricsCount = (ulong)(await Blockchain.MetricsCount());
+        if(MetricsCount > 0)
+        {
+            //await GetAllMetrics();
+
+            var item = await Blockchain.GetMetric(1);
+            Metrics.Add(item);
+        }
 
     }
 
@@ -180,6 +187,15 @@ else
         catch(Exception ex)
         {
             Toast.ShowError($"hz: {ex.Message}");
+        }
+    }
+
+    async Task GetAllMetrics()
+    {
+        for(ulong i = 0; i < MetricsCount; i++)
+        {
+            var item = await Blockchain.GetMetric(i);
+            Metrics.Add(item);
         }
     }
 

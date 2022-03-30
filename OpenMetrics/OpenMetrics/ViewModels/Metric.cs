@@ -2,7 +2,7 @@
 {
     public class Metric
     {
-        public int Id { get; set; }
+        public ulong Id { get; set; }
         public string Cid { get; set; }
         public string Creator { get; set; }
         public string Editor { get; set; }

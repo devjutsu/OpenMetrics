@@ -16,6 +16,7 @@ namespace OpenMetrics.Services
     {
         Task<BigInteger> MetricsCount();
         Task<string> SubmitMetric(Metric metric);
+        Task<Metric> GetMetric(ulong id);
     }
 
     public class ChainClient : IChain
@@ -25,14 +26,16 @@ namespace OpenMetrics.Services
         private readonly ClientConfig _config;
         private readonly IJSRuntime _js;
         private readonly MetaMaskService _meta;
+        private readonly HttpClient _http;
 
-        public ChainClient(AppState state, IToastService toast, ClientConfig config, IJSRuntime js, MetaMaskService meta)
+        public ChainClient(AppState state, IToastService toast, ClientConfig config, IJSRuntime js, MetaMaskService meta, HttpClient http)
         {
             _state = state;
             _toast = toast;
             _config = config;
             _js = js;
             _meta = meta;
+            _http = http;
         }
 
         public async Task<BigInteger> MetricsCount()
@@ -60,6 +63,20 @@ namespace OpenMetrics.Services
                 Console.WriteLine($"error: {ex.Message}");
             }
             return 0;
+        }
+
+        public async Task<Metric> GetMetric(ulong id)
+        {
+            var web3 = new Web3(_config.RpcUrl);
+
+            var abi = await _http.GetStringAsync("abi.json");
+            var contract = web3.Eth.GetContract(abi, _config.ContractAddress);
+
+            var tmp = contract.GetFunction("Metrics");
+            var tst = await tmp.CallDeserializingToObjectAsync<MetricsDTO>(id);
+
+            var metric = tst.DtoToMetric(id);
+            return metric;
         }
 
         public async Task<string> SubmitMetric(Metric metric)

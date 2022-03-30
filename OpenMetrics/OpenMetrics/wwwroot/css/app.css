@@ -63,18 +63,25 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
-
-
-
-
-
-
-.lds-ripple {
-    display: inline-block;
-    position: relative;
-    width: 80px;
-    height: 80px;
+.table-metric-line {
+    cursor: pointer;
 }
+    .table-metric-line:hover {
+        background-color: lightsteelblue;
+    }
+
+
+
+
+
+    .lds-ripple {
+        display: inline-block;
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        left: calc(50% - 40px);
+        top: calc(50% - 40px);
+    }
 
     .lds-ripple div {
         position: absolute;

@@ -44,11 +44,13 @@ else if (!ProperChain)
 }
 else
 {
-    <div>Metrics: @MetricsCount</div>
+    <div style="margin-top: 1rem; margin-bottom: 1rem;">Metrics: @MetricsCount</div>
 
     <ListMetricsComponent />
 
-    <button class="btn btn-primary" @onclick="@(() => OpenAddMetric())">Add Metric</button>
+    <div style="margin-top: 1rem; margin-bottom: 1rem;">
+        <button class="btn btn-primary" @onclick="@(() => OpenAddMetric())">Add Metric</button>
+    </div>
 
     @if(AddingMetrics)
     {
@@ -170,9 +172,12 @@ else
 
     async Task DoneAdding(Metric metric)
     {
+        Spinning = true;
         try
         {
             var added = await Blockchain.SubmitMetric(metric);
+            metric.Id = ++MetricsCount;
+
             Console.WriteLine($"Added: {added}");
             if(!string.IsNullOrEmpty(added))
             {
@@ -184,6 +189,7 @@ else
         {
             Toast.ShowError($"hz: {ex.Message}");
         }
+        Spinning = false;
     }
 
     async Task GetAllMetrics()
@@ -192,6 +198,7 @@ else
         {
             var item = await Blockchain.GetMetric(i);
             Metrics.Add(item);
+            StateHasChanged();
         }
     }
 

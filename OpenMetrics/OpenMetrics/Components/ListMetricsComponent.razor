@@ -1,9 +1,28 @@
 ﻿@if (Metrics != null && Metrics.Count > 0)
 {
-    @foreach (var metric in Metrics)
-    {
-        <div>@metric.Id @metric.Cid</div>
-    }
+    <div style="margin-top: 1rem; margin-bottom: 1rem;">
+        <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">CID</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var metric in Metrics)
+        {
+            <tr class="table-metric-line">
+                <th scope="row">
+                    @metric.Id
+                </th>
+                <td>
+                    @metric.Cid
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    </div>
 }
 
 

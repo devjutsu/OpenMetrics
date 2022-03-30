@@ -13,12 +13,30 @@ public class MetricsCount : FunctionMessage
 {
 }
 
-//[Function("submitMetric", "uint256")]
-//public class SubmitMetricFunction : FunctionMessage
-//{
-//    [Parameter("string", "_cid", 1)] public string Cid { get; set; }
-//    [Parameter("bytes32", "_checksum", 2)] public string Checksum { get; set; }
-//}
+[FunctionOutput]
+public class MetricsDTO: IFunctionOutputDTO
+{
+    [Parameter("address", "creator", 1)]
+    public string Creator { get; set; }
+
+    [Parameter("address", "editor", 2)]
+    public string Editor { get; set; }
+
+    [Parameter("address", "approver", 3)]
+    public string Approver { get; set; }
+
+    [Parameter("uint8", "status", 4)]
+    public int Status { get; set; }
+
+    [Parameter("string", "cid", 5)]
+    public string Cid { get; set; }
+
+    [Parameter("bytes32", "checksum", 6)]
+    public byte[] Checksum { get; set; }
+
+    //[Parameter("uint256", "id", 1)]
+    //public int Id { get; set; }
+}
 
 //[Function("checkProfit", "uint256")]
 //public class CheckProfitFunction : FunctionMessage

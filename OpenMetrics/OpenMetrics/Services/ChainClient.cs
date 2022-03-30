@@ -17,6 +17,7 @@ namespace OpenMetrics.Services
         Task<BigInteger> MetricsCount();
         Task<string> SubmitMetric(Metric metric);
         Task<Metric> GetMetric(ulong id);
+        Task<bool> ApproveMetric(ulong id);
     }
 
     public class ChainClient : IChain
@@ -115,6 +116,42 @@ namespace OpenMetrics.Services
                 Console.WriteLine($"error: {ex.Message}");
             }
             return null;
+        }
+
+        public async Task<bool> ApproveMetric(ulong id)
+        {
+            try
+            {
+                if (_state.ChainId != _config.NetworkId)
+                {
+                    _toast.ShowError($"Please, switch to chain: {NetworksList.Networks[_config.NetworkId]}");
+                    return false;
+                }
+
+                var web3 = new Web3(_config.RpcUrl);
+                var parameters = new Parameter[] {
+                    new Parameter(type: "uint256", name: "_cid", order: 1),
+                };
+
+                Console.WriteLine("CALL APPROVE");
+
+                var values = new object[] { id };
+
+                var receipt = await _meta.SendTransactionAndWaitForReceipt(web3.Client,
+                                                            ContractFunctionNames.ApproveMetricFunction,
+                                                            _config.ContractAddress,
+                                                            Web3.Convert.ToWei(0),
+                                                            parameters,
+                                                            values);
+                if (receipt.Status == BigInteger.One)
+                    return true;
+                else return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"error: {ex.Message}");
+            }
+            return false;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace OpenMetrics.Services;
 public static class ContractFunctionNames
 {
     public static string SubmitMetricFunction { get; } = "submitMetric";
+    public static string ApproveMetricFunction { get; } = "approveMetric";
 }
 
 [Function("metricsCount", "uint256")]

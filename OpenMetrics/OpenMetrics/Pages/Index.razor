@@ -197,6 +197,8 @@ else
 
     async Task GetAllMetrics()
     {
+        Metrics.Clear();
+        SelectedMetric = null;
         for(ulong i = 1; i <= MetricsCount; i++)
         {
             var item = await Blockchain.GetMetric(i);
@@ -213,7 +215,10 @@ else
 
     async Task Approve(Metric m)
     {
-        Console.WriteLine($"Supposed to call Approve: {m.Id}");
+        Spinning = true;
+        await Blockchain.ApproveMetric(m.Id);
+        Spinning = false;
+        await GetAllMetrics();
     }
 
     // ----

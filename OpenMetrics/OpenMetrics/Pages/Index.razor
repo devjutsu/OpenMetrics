@@ -48,13 +48,15 @@ else
 
     <ListMetricsComponent />
 
-    <div style="margin-top: 1rem; margin-bottom: 1rem;">
-        <button class="btn btn-primary" @onclick="@(() => OpenAddMetric())">Add Metric</button>
-    </div>
-
-    @if(AddingMetrics)
+    @if (AddingMetrics)
     {
         <AddMetricComponent DoneAdding=DoneAdding />
+    }
+    else
+    {
+        <div style="margin-top: 1rem; margin-bottom: 1rem;">
+            <button class="btn btn-primary" @onclick="@(() => OpenAddMetric())">Add Metric</button>
+        </div>
     }
 
     <ListMetricsComponent Metrics=Metrics OnSelect=SelectMetric />
@@ -91,13 +93,13 @@ else
         if (!await Meta.IsSiteConnected())
             await Meta.ConnectMetaMask();
         var userId = await Meta.GetSelectedAddress();
-        if(!string.IsNullOrEmpty(userId))
+        if (!string.IsNullOrEmpty(userId))
         {
             await AppState.Login(this, userId);
         }
 
         MetricsCount = (ulong)(await Blockchain.MetricsCount());
-        if(MetricsCount > 0)
+        if (MetricsCount > 0)
         {
             await GetAllMetrics();
         }
@@ -182,13 +184,13 @@ else
             metric.Id = ++MetricsCount;
 
             Console.WriteLine($"Added: {added}");
-            if(!string.IsNullOrEmpty(added))
+            if (!string.IsNullOrEmpty(added))
             {
                 Metrics.Add(metric);
             }
             AddingMetrics = false;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Toast.ShowError($"hz: {ex.Message}");
         }
@@ -199,7 +201,7 @@ else
     {
         Metrics.Clear();
         SelectedMetric = null;
-        for(ulong i = 1; i <= MetricsCount; i++)
+        for (ulong i = 1; i <= MetricsCount; i++)
         {
             var item = await Blockchain.GetMetric(i);
             Metrics.Add(item);

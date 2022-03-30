@@ -186,6 +186,7 @@ else
             Console.WriteLine($"Added: {added}");
             if (!string.IsNullOrEmpty(added))
             {
+                metric = await Blockchain.GetMetric(metric.Id);
                 Metrics.Add(metric);
             }
             AddingMetrics = false;

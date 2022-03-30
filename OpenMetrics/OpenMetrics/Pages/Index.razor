@@ -44,8 +44,6 @@ else if (!ProperChain)
 }
 else
 {
-    <div style="margin-top: 1rem; margin-bottom: 1rem;">Metrics: @MetricsCount</div>
-
     <ListMetricsComponent />
 
     @if (AddingMetrics)
@@ -55,7 +53,7 @@ else
     else
     {
         <div style="margin-top: 1rem; margin-bottom: 1rem;">
-            <button class="btn btn-primary" @onclick="@(() => OpenAddMetric())">Add Metric</button>
+            <button class="btn btn-primary" @onclick="@(() => OpenAddMetric())"><span class="oi oi-plus" style="margin-right:.5rem; font-size:smaller;"></span>Add Metric</button>
         </div>
     }
 
@@ -69,7 +67,6 @@ else
     bool HasMetaMask = false;
     bool ProperChain => AppState.ChainId == CFG.NetworkId;
     string NeededChain => NetworksList.Networks[CFG.NetworkId];
-    ulong MetricsCount = 0;
     bool AddingMetrics = false;
     List<Metric> Metrics = new List<Metric>();
     Metric SelectedMetric = null;
@@ -98,8 +95,10 @@ else
             await AppState.Login(this, userId);
         }
 
-        MetricsCount = (ulong)(await Blockchain.MetricsCount());
-        if (MetricsCount > 0)
+        var metricsCount = (ulong)(await Blockchain.MetricsCount());
+        AppState.SetMetricCount(this, metricsCount);
+
+        if (AppState.MetricsCount > 0)
         {
             await GetAllMetrics();
         }
@@ -181,7 +180,10 @@ else
         try
         {
             var added = await Blockchain.SubmitMetric(metric);
-            metric.Id = ++MetricsCount;
+
+            var metricsCount = AppState.MetricsCount;
+            metric.Id = ++metricsCount;
+            AppState.SetMetricCount(this, metricsCount);
 
             Console.WriteLine($"Added: {added}");
             if (!string.IsNullOrEmpty(added))
@@ -202,7 +204,7 @@ else
     {
         Metrics.Clear();
         SelectedMetric = null;
-        for (ulong i = 1; i <= MetricsCount; i++)
+        for (ulong i = 1; i <= AppState.MetricsCount; i++)
         {
             var item = await Blockchain.GetMetric(i);
             Metrics.Add(item);

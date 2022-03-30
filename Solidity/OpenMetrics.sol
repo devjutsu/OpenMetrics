@@ -18,7 +18,8 @@ contract OpenMetrics {
         Status status;
         string cid;
         bytes32 checksum;
-        Change[] history;
+        // mapping(uint256 => Change) transactions;
+        // uint256 transactionCount;
     }
 
     enum Status {
@@ -58,14 +59,19 @@ contract OpenMetrics {
         if(true) { // @! checks
             metricsCount++;
 
+            //Change memory change = Change({author: msg.sender, changeType: ChangeType.Add});
+            // Change[] memory hist = new Change[](1);
+            // hist.push(Change({author: msg.sender, changeType: ChangeType.Add}));
+
             Metrics[metricsCount] = Metric({
                 creator: msg.sender, 
                 editor: msg.sender,
                 approver: address(0), 
                 status: Status.Posted, 
                 cid: _cid, 
-                checksum: _checksum,
-                history: new Change[](0)
+                checksum: _checksum
+                //history: null,
+                // transactionCount: 0
             });
         }
     }
@@ -81,8 +87,8 @@ contract OpenMetrics {
                 approver: address(0), 
                 status: Status.None, 
                 cid: _cid, 
-                checksum: _checksum,
-                history: new Change[](0)
+                checksum: _checksum
+                // history: new Change[](0)
             });
         }
     }

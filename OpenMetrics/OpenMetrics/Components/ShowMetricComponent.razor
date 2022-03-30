@@ -1,5 +1,20 @@
-﻿<div>ShowMetricComponent</div>
+﻿@using Nethereum.Hex.HexConvertors.Extensions
+
+@if (Metric != null)
+{
+    <div style="margin-top: 1rem; margin-bottom: 1rem;">
+        
+        <div>Id: @Metric.Id</div>
+        <div>CID: @Metric.Cid</div>
+        <div>Creator: @Metric.Creator</div>
+        <div>Editor: @Metric.Creator</div>
+        <div>Approver: @Metric.Approver</div>
+        <div>Status: @Metric.Status</div>
+        <div>Checksum: @Metric.Checksum.ToHex()</div>
+    </div>
+}
 
 @code {
-
+    [Parameter]
+    public Metric Metric { get; set; }
 }

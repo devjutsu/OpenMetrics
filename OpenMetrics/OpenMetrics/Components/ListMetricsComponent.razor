@@ -11,7 +11,7 @@
         <tbody>
         @foreach (var metric in Metrics)
         {
-            <tr class="table-metric-line">
+            <tr class="table-metric-line" @onclick="@(() => Select(metric))">
                 <th scope="row">
                     @metric.Id
                 </th>
@@ -29,4 +29,11 @@
 @code {
     [Parameter]
     public List<Metric> Metrics { get; set; }
+    [Parameter]
+    public EventCallback<Metric> OnSelect { get; set; }
+
+    async Task Select(Metric metric)
+    {
+        await OnSelect.InvokeAsync(metric);
+    }
 }

@@ -57,7 +57,9 @@ else
         <AddMetricComponent DoneAdding=DoneAdding />
     }
 
-    <ListMetricsComponent Metrics=Metrics />
+    <ListMetricsComponent Metrics=Metrics OnSelect=SelectMetric />
+
+    <ShowMetricComponent Metric=SelectedMetric />
 }
 
 @code {
@@ -68,6 +70,7 @@ else
     ulong MetricsCount = 0;
     bool AddingMetrics = false;
     List<Metric> Metrics = new List<Metric>();
+    Metric SelectedMetric = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -200,6 +203,12 @@ else
             Metrics.Add(item);
             StateHasChanged();
         }
+    }
+
+    async Task SelectMetric(Metric m)
+    {
+        SelectedMetric = m;
+        StateHasChanged();
     }
 
     // ----

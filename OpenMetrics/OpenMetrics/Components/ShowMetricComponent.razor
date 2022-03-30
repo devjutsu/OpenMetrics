@@ -12,9 +12,18 @@
         <div>Status: @Metric.Status</div>
         <div>Checksum: @Metric.Checksum.ToHex()</div>
     </div>
+
+    <button class="btn btn-success" @onclick="@(() => Approve(Metric))">Approve</button>
 }
 
 @code {
     [Parameter]
     public Metric Metric { get; set; }
+    [Parameter]
+    public EventCallback<Metric> OnApprove { get; set; }
+
+    async Task Approve(Metric metric)
+    {
+        await OnApprove.InvokeAsync(metric);
+    }
 }

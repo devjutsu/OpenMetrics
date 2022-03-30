@@ -59,7 +59,7 @@ else
 
     <ListMetricsComponent Metrics=Metrics OnSelect=SelectMetric />
 
-    <ShowMetricComponent Metric=SelectedMetric />
+    <ShowMetricComponent Metric=SelectedMetric OnApprove=Approve />
 }
 
 @code {
@@ -209,6 +209,11 @@ else
     {
         SelectedMetric = m;
         StateHasChanged();
+    }
+
+    async Task Approve(Metric m)
+    {
+        Console.WriteLine($"Supposed to call Approve: {m.Id}");
     }
 
     // ----

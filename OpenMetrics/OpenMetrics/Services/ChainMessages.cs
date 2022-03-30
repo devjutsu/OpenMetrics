@@ -8,6 +8,11 @@ using Nethereum.Web3;
 
 namespace OpenMetrics.Services;
 
+public static class ContractFunctionNames
+{
+    public static string SubmitMetricFunction { get; } = "submitMetric";
+}
+
 [Function("metricsCount", "uint256")]
 public class MetricsCount : FunctionMessage
 {
@@ -38,8 +43,10 @@ public class MetricsDTO: IFunctionOutputDTO
     //public int Id { get; set; }
 }
 
-//[Function("checkProfit", "uint256")]
-//public class CheckProfitFunction : FunctionMessage
+
+//function approveMetric(uint256 _id) public {
+//[Function("approveMetric", "uint256")]
+//public class ApproveMetricFunction : FunctionMessage
 //{
 //    [Parameter("bytes6", "_invite", 1)] public byte[] Invite { get; set; }
 //}

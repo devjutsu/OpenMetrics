@@ -8,6 +8,10 @@ namespace OpenMetrics.Services
         public long ChainId { get; private set; } = 1;
         public string AccountId {get; private set;}
         public bool IsAuthenticated => AccountId != null && !string.IsNullOrWhiteSpace(AccountId);
+        public ulong MetricsCount { get; private set; } = 0;
+        public bool IsSuperuser => AccountId.ToLower() == "0x47B40160f72C4321E08DE8B95E262e902c991cD3".ToLower();
+        public AppScreenMode ScreenMode { get; private set; } = AppScreenMode.DefaultVerified;
+
 
         public string AccountToShow()
         {
@@ -24,6 +28,18 @@ namespace OpenMetrics.Services
             _js = JS;
         }
 
+        public void SetMetricCount(ComponentBase source, ulong metricsCount)
+        {
+            this.MetricsCount = metricsCount;
+            NotifyStateChanged(source, "MetricCount");
+        }
+
+        public void SetScreenMode(ComponentBase source, AppScreenMode mode)
+        {
+            this.ScreenMode = mode;
+            NotifyStateChanged(source, "ScreenMode");
+        }
+
         public void SetChain(ComponentBase source, long chainId)
         {
             this.ChainId = chainId;
@@ -32,12 +48,19 @@ namespace OpenMetrics.Services
 
         public async Task Login(ComponentBase source, string address)
         {
-            AccountId = address;
+            AccountId = address.ToLower();
             NotifyStateChanged(source, "CurrentUser");
         }
 
         public event Action<ComponentBase, string> Statechanged;
         private void NotifyStateChanged(ComponentBase source, string Property) =>
             Statechanged?.Invoke(source, Property);
+    }
+
+    public enum AppScreenMode
+    {
+        DefaultVerified = 0,
+        All = 1,
+        Unchecked = 2,
     }
 }

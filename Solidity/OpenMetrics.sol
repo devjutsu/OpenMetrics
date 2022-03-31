@@ -6,8 +6,8 @@ contract OpenMetrics {
     address payable public owner;
 
     mapping(uint256 => Metric) public Metrics;
-
     uint256 public metricsCount;
+    
     mapping(address => uint256) approvers;
     uint256 public approversCount;
 
@@ -125,5 +125,28 @@ contract OpenMetrics {
     function editApprover(address fromAddress, address toAddress) public {
         approvers[fromAddress] = 0;
         approvers[toAddress] = 1;
+    }
+
+    function countApproved() public view returns (uint256) {
+        uint256 count = 0;
+        for(uint256 i = 0; i<metricsCount; i++) {
+            if(Metrics[i].status == Status.Approved) {
+                count ++;
+            }
+        }
+        return count;
+    }
+
+    function metricsApproved() public view returns (uint256[] memory) {
+        uint256 count = countApproved();
+        uint256[] memory approves = new uint256[](count);
+        uint256 j = 0;
+        for(uint256 i = 0; i<metricsCount; i++) {
+            if(Metrics[i].status == Status.Approved) {
+                approves[j] = i;
+            }
+            j++;
+        }
+        return approves;
     }
 }

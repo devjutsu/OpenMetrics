@@ -34,6 +34,13 @@ namespace OpenMetrics.Services
         //public int Id { get; set; }
     }
 
+    [FunctionOutput]
+    public class ApprovedListDTO : IFunctionOutputDTO
+    {
+        [Parameter("uint256[]", "approved", 1)]
+        public List<BigInteger> Approved { get; set; }
+    }
+
     [Event("Transaction")]
     public class TransactionEventDTO : IEventDTO
     {

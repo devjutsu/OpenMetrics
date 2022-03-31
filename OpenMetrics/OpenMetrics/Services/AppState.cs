@@ -8,14 +8,16 @@ namespace OpenMetrics.Services
     {
         public long ChainId { get; private set; } = 1;
         public string AccountId {get; private set;}
-        public bool IsAuthenticated => AccountId != null && !string.IsNullOrWhiteSpace(AccountId);
         public ulong MetricsCount { get; private set; } = 0;
-        public ulong ApprovedCount { get; set; } = 0;
-        public bool IsSuperuser => AccountId.ToLower() == "0x47B40160f72C4321E08DE8B95E262e902c991cD3".ToLower();
+        public ulong ApprovedCount { get; private set; } = 0;
+        public List<ulong> ApprovedIds { get; private set; } = new List<ulong>();
+        public ulong UncheckedCount { get; private set; } = 0;
         public AppScreenMode ScreenMode { get; private set; } = AppScreenMode.All;
-        public Metric SelectedMetric { get; set; } = null;
-        public List<Metric> Metrics { get; set; } = new List<Metric>();
+        public Metric SelectedMetric { get; private set; } = null;
+        public List<Metric> Metrics { get; private set; } = new List<Metric>();
 
+        public bool IsAuthenticated => AccountId != null && !string.IsNullOrWhiteSpace(AccountId);
+        public bool IsSuperuser => AccountId.ToLower() == "0x47B40160f72C4321E08DE8B95E262e902c991cD3".ToLower();
 
         public string AccountToShow()
         {
@@ -41,7 +43,9 @@ namespace OpenMetrics.Services
         public void SetApprovedCount(ComponentBase source, ulong approvedCount)
         {
             this.ApprovedCount = approvedCount;
+            this.UncheckedCount = MetricsCount - approvedCount;
             NotifyStateChanged(source, "ApprovedCount");
+            NotifyStateChanged(source, "UncheckedCount");
         }
 
         public void AddMetric(ComponentBase source, Metric metric)
@@ -72,6 +76,12 @@ namespace OpenMetrics.Services
         {
             this.ChainId = chainId;
             NotifyStateChanged(source, "ChainId");
+        }
+
+        public void SetApprovedMetricIds(ComponentBase source, List<ulong> approvedIds)
+        {
+            this.ApprovedIds = approvedIds;
+            NotifyStateChanged(source, "ApprovedMetricIds");
         }
 
         public async Task Login(ComponentBase source, string address)

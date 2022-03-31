@@ -61,8 +61,11 @@ else
     
     <ShowMetricComponent Metric=AppState.SelectedMetric OnApprove=Approve />
 
-    <button class="btn btn-warning" @onclick="@(() => GetApprovedCount())">Get Approves count</button>
-    
+    <button class="btn btn-warning" @onclick="@(() => GetApprovedMetrics())">Get Approved Metrics</button>
+    @foreach(var item in AppState.ApprovedIds)
+    {
+        <div>@item</div>
+    }
 }
 
 @code {
@@ -237,6 +240,12 @@ else
         var approvedCount = await Blockchain.ApprovedCount();
         AppState.SetApprovedCount(this, (ulong)approvedCount);
         Spinning = false;
+    }
+
+    async Task GetApprovedMetrics()
+    {
+        var approvedIds = await Blockchain.GetApprovedMetrics();
+        AppState.SetApprovedMetricIds(this, approvedIds);
     }
 
     // ----

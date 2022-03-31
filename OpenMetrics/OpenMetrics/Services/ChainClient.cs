@@ -21,6 +21,7 @@ namespace OpenMetrics.Services
         Task<bool> ApproveMetric(ulong id);
         Task GetTransactions(ulong id);
         Task<BigInteger> ApprovedCount();
+        Task<List<ulong>> GetApprovedMetrics();
     }
 
     public class ChainClient : IChain
@@ -103,6 +104,25 @@ namespace OpenMetrics.Services
                 Console.WriteLine($"error: {ex.Message}");
             }
             return 0;
+        }
+
+        public async Task<List<ulong>> GetApprovedMetrics()
+        {
+            var web3 = new Web3(_config.RpcUrl);
+
+            var abi = await _http.GetStringAsync("abi.json");
+            var contract = web3.Eth.GetContract(abi, _config.ContractAddress);
+
+            Console.WriteLine($"Debug 0");
+            var funcHandler = contract.GetFunction("metricsApproved");
+            Console.WriteLine($"Debug 1");
+            var result = await funcHandler.CallDeserializingToObjectAsync<ApprovedListDTO>();
+            Console.WriteLine($"Debug 2");
+
+            var ids = result.Approved.Select(o => (ulong)o).ToList();
+
+            Console.WriteLine($"got approved: {result.Approved.Count}");
+            return ids;
         }
 
         public async Task<string> SubmitMetric(Metric metric)

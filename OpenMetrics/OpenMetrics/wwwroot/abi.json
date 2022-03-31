@@ -127,6 +127,13 @@
   },
   {
     "inputs": [],
+    "name": "clean",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "countApproved",
     "outputs": [
       {
@@ -140,7 +147,7 @@
   },
   {
     "inputs": [],
-    "name": "countPosted",
+    "name": "countUnchecked",
     "outputs": [
       {
         "internalType": "uint256",
@@ -207,7 +214,7 @@
     "outputs": [
       {
         "internalType": "uint256[]",
-        "name": "",
+        "name": "approved",
         "type": "uint256[]"
       }
     ],
@@ -229,11 +236,11 @@
   },
   {
     "inputs": [],
-    "name": "metricsPosted",
+    "name": "metricsUnchecked",
     "outputs": [
       {
         "internalType": "uint256[]",
-        "name": "",
+        "name": "unverified",
         "type": "uint256[]"
       }
     ],

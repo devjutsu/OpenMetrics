@@ -149,4 +149,27 @@ contract OpenMetrics {
         }
         return approves;
     }
+
+    function countPosted() public view returns (uint256) {
+        uint256 count = 0;
+        for(uint256 i = 0; i<metricsCount; i++) {
+            if(Metrics[i].status == Status.Posted) {
+                count ++;
+            }
+        }
+        return count;
+    }
+
+    function metricsPosted() public view returns (uint256[] memory) {
+        uint256 count = countPosted();
+        uint256[] memory posts = new uint256[](count);
+        uint256 j = 0;
+        for(uint256 i = 0; i<metricsCount; i++) {
+            if(Metrics[i].status == Status.Posted) {
+                posts[j] = i;
+            }
+            j++;
+        }
+        return posts;
+    }
 }

@@ -1,4 +1,5 @@
 ﻿@using Nethereum.Hex.HexConvertors.Extensions
+@inject IChain Blockchain
 
 @if (Metric != null)
 {
@@ -14,6 +15,9 @@
     </div>
 
     <button class="btn btn-success" @onclick="@(() => Approve(Metric))">Approve</button>
+
+    <p>&nbsp;</p>
+    <HistoryComponent />
 }
 
 @code {
@@ -25,5 +29,25 @@
     async Task Approve(Metric metric)
     {
         await OnApprove.InvokeAsync(metric);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine($"showing info: {Metric?.Id}");
+        if(Metric != null)
+        {
+            Console.WriteLine("show metric");
+            await Blockchain.GetTransactions(Metric.Id);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        Console.WriteLine($"render: {Metric?.Id}");
+        if(Metric != null)
+        {
+            Console.WriteLine("show metric");
+            await Blockchain.GetTransactions(Metric.Id);
+        }
     }
 }

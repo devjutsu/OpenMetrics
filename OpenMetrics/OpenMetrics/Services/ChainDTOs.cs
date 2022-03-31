@@ -5,6 +5,7 @@ using Nethereum.ABI.Model;
 using Nethereum.Contracts;
 using Nethereum.Hex.HexConvertors.Extensions;
 using Nethereum.Web3;
+using System.Numerics;
 
 namespace OpenMetrics.Services
 {
@@ -33,12 +34,16 @@ namespace OpenMetrics.Services
         //public int Id { get; set; }
     }
 
-
-    public class TransactionEventDTO
+    [Event("Transaction")]
+    public class TransactionEventDTO : IEventDTO
     {
-        public ulong Id { get; set; }
-        public string Author { get; set; }
+        [Parameter("uint256", "id", 1, false)]
+        public BigInteger Id { get; set; }
+        [Parameter("address", "_from", 2, true)]
+        public string author { get; set; }
+        [Parameter("uint8", "changeType", 3, false)]
         public int ChangeType { get; set; }
+        [Parameter("string", "cid", 4, true)]
         public string Cid { get; set; }
     }
 }

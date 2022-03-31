@@ -29,8 +29,8 @@ contract OpenMetrics {
 
     event Transaction (
         uint256 id,
-        address author,
-        TransactionType changeType,
+        // address author,
+        // TransactionType changeType,
         string cid
     );
 
@@ -63,12 +63,15 @@ contract OpenMetrics {
                 creator: msg.sender, 
                 editor: msg.sender,
                 approver: address(0), 
-                status: Status.None, 
+                status: Status.Posted, 
                 cid: _cid, 
                 checksum: _checksum
             });
 
-            emit Transaction(metricsCount, msg.sender, TransactionType.Add, _cid);
+            emit Transaction(metricsCount, 
+                            // msg.sender, 
+                            // TransactionType.Add, 
+                            _cid);
         }
     }
 

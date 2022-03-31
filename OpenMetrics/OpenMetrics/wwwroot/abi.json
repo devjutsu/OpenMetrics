@@ -34,18 +34,6 @@
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "author",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "enum OpenMetrics.TransactionType",
-        "name": "changeType",
-        "type": "uint8"
-      },
-      {
-        "indexed": false,
         "internalType": "string",
         "name": "cid",
         "type": "string"

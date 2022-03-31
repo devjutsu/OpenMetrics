@@ -39,11 +39,11 @@ namespace OpenMetrics.Services
     {
         [Parameter("uint256", "id", 1, false)]
         public BigInteger Id { get; set; }
-        [Parameter("address", "_from", 2, true)]
-        public string author { get; set; }
-        [Parameter("uint8", "changeType", 3, false)]
-        public int ChangeType { get; set; }
-        [Parameter("string", "cid", 4, true)]
+        //[Parameter("address", "_from", 2, true)]
+        //public string author { get; set; }
+        //[Parameter("uint8", "changeType", 3, false)]
+        //public int ChangeType { get; set; }
+        [Parameter("string", "cid", 2, true)]
         public string Cid { get; set; }
     }
 }

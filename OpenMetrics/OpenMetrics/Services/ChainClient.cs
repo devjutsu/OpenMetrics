@@ -161,22 +161,28 @@ namespace OpenMetrics.Services
             _toast.ShowInfo("Trying to get history");
             var web3 = new Web3(_config.RpcUrl);
             var transactionEventHandler = web3.Eth.GetEvent<TransactionEventDTO>(_config.ContractAddress);
-            var filter = transactionEventHandler.CreateFilterInput(
-                fromBlock: new BlockParameter(25742712),
-                toBlock: new BlockParameter(25742805));
+            //var filter = transactionEventHandler.CreateFilterInput(
+            //    fromBlock: new BlockParameter(25746500)
+            //    //toBlock: new BlockParameter(25746540)
+            //    );
+
+
+            var bzzt = transactionEventHandler.CreateFilterInput();
+            var tste = bzzt.GetFirstTopicValueAsString(0x842fa4f3);
+            Console.WriteLine($"Got: {tste}");
 
             //var filter = transactionEventHandler.CreateFilterInput(toBlock: new BlockParameter(25742805));
-            var logs = await transactionEventHandler.GetAllChangesAsync(filter);
+            //var logs = await transactionEventHandler.GetAllChangesAsync(filter);
 
-            if (logs.Count == 0)
-                Console.WriteLine("none");
+            //Console.WriteLine($"Got events: {logs.Count}");
 
-            foreach (var logItem in logs)
-                Console.WriteLine(
-                    $"tx:{logItem.Log.TransactionHash} " +
-                    $"id:{logItem.Event.Id} " +
-                    $"cid:{logItem.Event.Cid} " +
-                    $"type:{logItem.Event.ChangeType}");
+            //foreach (var logItem in logs)
+            //    Console.WriteLine(
+            //        $"tx:{logItem.Log.TransactionHash} " +
+            //        $"id:{logItem.Event.Id} " +
+            //        $"cid:{logItem.Event.Cid} " //+
+            //        //$"type:{logItem.Event.ChangeType}"
+            //        );
 
             // var transferEventHandler = web3.Eth.GetEvent<TransferEventDTO>(contractAddress);
             // var filterAllTransferEventsForContract = transferEventHandler.CreateFilterInput();

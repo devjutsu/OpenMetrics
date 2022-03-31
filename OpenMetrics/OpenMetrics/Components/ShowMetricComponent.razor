@@ -14,7 +14,7 @@
         <div>Checksum: @Metric.Checksum.ToHex()</div>
     </div>
 
-    <button class="btn btn-success" @onclick="@(() => Approve(Metric))">Approve</button>
+    <button class="btn btn-success" @onclick="@(() => Approve(Metric))" disabled=@BtnDisabled>Approve</button>
 
     <p>&nbsp;</p>
     <HistoryComponent />
@@ -25,6 +25,7 @@
     public Metric Metric { get; set; }
     [Parameter]
     public EventCallback<Metric> OnApprove { get; set; }
+    bool BtnDisabled => Metric.Status == 2;
 
     async Task Approve(Metric metric)
     {

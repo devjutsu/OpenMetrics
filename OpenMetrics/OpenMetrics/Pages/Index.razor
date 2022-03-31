@@ -99,6 +99,8 @@ else
         var metricsCount = (ulong)(await Blockchain.MetricsCount());
         AppState.SetMetricCount(this, metricsCount);
 
+        await GetApprovedCount();
+
         if (AppState.MetricsCount > 0)
         {
             await GetAllMetrics();
@@ -226,12 +228,14 @@ else
         await Blockchain.ApproveMetric(m.Id);
         Spinning = false;
         await GetAllMetrics();
+        await GetApprovedCount();
     }
 
     async Task GetApprovedCount()
     {
         Spinning = true;
-        await Blockchain.ApprovedCount();
+        var approvedCount = await Blockchain.ApprovedCount();
+        AppState.SetApprovedCount(this, (ulong)approvedCount);
         Spinning = false;
     }
 

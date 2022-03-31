@@ -2,7 +2,7 @@
 @implements IDisposable
 
 <div class="d-flex justify-content-center" style="">
-    <a href="#" style="margin: 1rem;" @onclick="@(() => Set(AppScreenMode.Verified))" class="@CssFor(AppScreenMode.Verified)">Verified</a>
+    <a href="#" style="margin: 1rem;" @onclick="@(() => Set(AppScreenMode.Verified))" class="@CssFor(AppScreenMode.Verified)">Verified (@AppState.ApprovedCount)</a>
     <a href="#" style="margin: 1rem;" @onclick="@(() => Set(AppScreenMode.Unchecked))" class="@CssFor(AppScreenMode.Unchecked)">Unchecked</a>
     <a href="#" style="margin: 1rem;" @onclick="@(() => Set(AppScreenMode.All))" class="@CssFor(AppScreenMode.All)">All Metrics (@AppState.MetricsCount)</a>
 </div>

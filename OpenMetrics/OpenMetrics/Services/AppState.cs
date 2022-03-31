@@ -10,6 +10,7 @@ namespace OpenMetrics.Services
         public string AccountId {get; private set;}
         public bool IsAuthenticated => AccountId != null && !string.IsNullOrWhiteSpace(AccountId);
         public ulong MetricsCount { get; private set; } = 0;
+        public ulong ApprovedCount { get; set; } = 0;
         public bool IsSuperuser => AccountId.ToLower() == "0x47B40160f72C4321E08DE8B95E262e902c991cD3".ToLower();
         public AppScreenMode ScreenMode { get; private set; } = AppScreenMode.All;
         public Metric SelectedMetric { get; set; } = null;
@@ -35,6 +36,12 @@ namespace OpenMetrics.Services
         {
             this.MetricsCount = metricsCount;
             NotifyStateChanged(source, "MetricCount");
+        }
+
+        public void SetApprovedCount(ComponentBase source, ulong approvedCount)
+        {
+            this.ApprovedCount = approvedCount;
+            NotifyStateChanged(source, "ApprovedCount");
         }
 
         public void AddMetric(ComponentBase source, Metric metric)

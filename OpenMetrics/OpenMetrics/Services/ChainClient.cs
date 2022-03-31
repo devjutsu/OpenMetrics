@@ -167,13 +167,22 @@ namespace OpenMetrics.Services
             //    );
 
 
-            var bzzt = transactionEventHandler.CreateFilterInput();
-            var tste = bzzt.GetFirstTopicValueAsString(0x842fa4f3);
-            Console.WriteLine($"Got: {tste}");
+            var filterInput = transactionEventHandler.CreateFilterInput();
+            var topic = filterInput.Topics.FirstOrDefault();
+            Console.WriteLine($"Got: {topic}");
+            Console.WriteLine($"addr: {filterInput.Address[0]}");
 
-            //var filter = transactionEventHandler.CreateFilterInput(toBlock: new BlockParameter(25742805));
+            var allEvents = await transactionEventHandler.GetAllChangesAsync(filterInput);
+            Console.WriteLine($"allEvents: {allEvents.Count}");
+
+
+            //var filter = transactionEventHandler.CreateFilterInput();
             //var logs = await transactionEventHandler.GetAllChangesAsync(filter);
+            //Console.WriteLine($"Got events: {logs.Count}");
 
+
+            //var filter = transactionEventHandler.CreateFilterInput(fromBlock: new BlockParameter(25746530));
+            //var logs = await transactionEventHandler.GetAllChangesAsync(filter);
             //Console.WriteLine($"Got events: {logs.Count}");
 
             //foreach (var logItem in logs)

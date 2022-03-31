@@ -18,23 +18,23 @@ contract OpenMetrics {
         Status status;
         string cid;
         bytes32 checksum;
-        // mapping(uint256 => Change) transactions;
-        // uint256 transactionCount;
     }
 
     enum Status {
         None,
         Posted,
-        Approved
+        Approved,
+        Rejected
     }
 
-    struct Change {
-        address author;
-        // datetime
-        ChangeType changeType;
-    }
+    event Transaction (
+        uint256 id,
+        address author,
+        TransactionType changeType,
+        string cid
+    );
 
-    enum ChangeType {
+    enum TransactionType {
         Add,
         Update,
         Approve
@@ -59,39 +59,35 @@ contract OpenMetrics {
         if(true) { // @! checks
             metricsCount++;
 
-            //Change memory change = Change({author: msg.sender, changeType: ChangeType.Add});
-            // Change[] memory hist = new Change[](1);
-            // hist.push(Change({author: msg.sender, changeType: ChangeType.Add}));
-
             Metrics[metricsCount] = Metric({
                 creator: msg.sender, 
-                editor: msg.sender,
-                approver: address(0), 
-                status: Status.Posted, 
-                cid: _cid, 
-                checksum: _checksum
-                //history: null,
-                // transactionCount: 0
-            });
-        }
-    }
-
-    function editMetric(uint256 _id, string memory _cid, bytes32 _checksum) public {
-        Metric storage prev = Metrics[_id];
-
-        if(true) { // @! do checks
-
-            Metrics[_id] = Metric({
-                creator: prev.creator, 
                 editor: msg.sender,
                 approver: address(0), 
                 status: Status.None, 
                 cid: _cid, 
                 checksum: _checksum
-                // history: new Change[](0)
             });
+
+            emit Transaction(metricsCount, msg.sender, TransactionType.Add, _cid);
         }
     }
+
+    // function editMetric(uint256 _id, string memory _cid, bytes32 _checksum) public {
+    //     Metric storage prev = Metrics[_id];
+
+    //     if(true) { // @! do checks
+
+    //         // Metrics[_id] = Metric({
+    //         //     creator: prev.creator, 
+    //         //     editor: msg.sender,
+    //         //     approver: address(0), 
+    //         //     status: Status.None, 
+    //         //     cid: _cid, 
+    //         //     checksum: _checksum
+    //         //     // history: new Change[](0)
+    //         // });
+    //     }
+    // }
 
     function deleteMetric(uint256 _id) public {
         if(true) { // @! checks
@@ -101,9 +97,13 @@ contract OpenMetrics {
 
     function approveMetric(uint256 _id) public {
         if(true) {
-            Metric storage metric = Metrics[_id];
-            metric.status = Status.Approved;
-            Metrics[_id] = metric;
+            Metrics[_id].status = Status.Approved;
+        }
+    }
+
+    function rejectMetric(uint256 _id) public {
+        if(true) {
+            Metrics[_id].status = Status.Rejected;
         }
     }
 

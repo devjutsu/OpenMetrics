@@ -20,6 +20,7 @@ namespace OpenMetrics.Services
         Task<Metric> GetMetric(ulong id);
         Task<bool> ApproveMetric(ulong id);
         Task GetTransactions(ulong id);
+        Task<BigInteger> ApprovedCount();
     }
 
     public class ChainClient : IChain
@@ -80,6 +81,27 @@ namespace OpenMetrics.Services
 
             var metric = tst.DtoToMetric(id);
             return metric;
+        }
+
+        public async Task<BigInteger> ApprovedCount()
+        {
+            try
+            {
+                var web3 = new Web3(_config.RpcUrl);
+                var args = new ApprovesCount() { };
+                var queryHandler = web3.Eth.GetContractQueryHandler<ApprovesCount>();
+                var resp = await queryHandler
+                                    .QueryAsync<BigInteger>(_config.ContractAddress, args)
+                                    .ConfigureAwait(false);
+
+                Console.WriteLine($"Metrics count: {resp}");
+                return resp;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"error: {ex.Message}");
+            }
+            return 0;
         }
 
         public async Task<string> SubmitMetric(Metric metric)
@@ -172,8 +194,8 @@ namespace OpenMetrics.Services
             Console.WriteLine($"Got: {topic}");
             Console.WriteLine($"addr: {filterInput.Address[0]}");
 
-            var allEvents = await transactionEventHandler.GetAllChangesAsync(filterInput);
-            Console.WriteLine($"allEvents: {allEvents.Count}");
+            //var allEvents = await transactionEventHandler.GetAllChangesAsync(filterInput);
+            //Console.WriteLine($"allEvents: {allEvents.Count}");
 
 
             //var filter = transactionEventHandler.CreateFilterInput();

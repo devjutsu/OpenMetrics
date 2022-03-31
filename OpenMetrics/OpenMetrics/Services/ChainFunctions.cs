@@ -19,6 +19,11 @@ public class MetricsCount : FunctionMessage
 {
 }
 
+[Function("countApproved", "uint256")]
+public class ApprovesCount : FunctionMessage
+{
+}
+
 
 //function approveMetric(uint256 _id) public {
 //[Function("approveMetric", "uint256")]

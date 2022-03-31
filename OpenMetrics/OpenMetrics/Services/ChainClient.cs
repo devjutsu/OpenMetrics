@@ -9,6 +9,7 @@ using OpenMetrics.ViewModels;
 using Nethereum.ABI.Model;
 using Nethereum.Hex.HexConvertors.Extensions;
 using MetaMask.Blazor;
+using Nethereum.RPC.Eth.DTOs;
 
 namespace OpenMetrics.Services
 {
@@ -18,6 +19,7 @@ namespace OpenMetrics.Services
         Task<string> SubmitMetric(Metric metric);
         Task<Metric> GetMetric(ulong id);
         Task<bool> ApproveMetric(ulong id);
+        Task GetTransactions(ulong id);
     }
 
     public class ChainClient : IChain
@@ -152,6 +154,33 @@ namespace OpenMetrics.Services
                 Console.WriteLine($"error: {ex.Message}");
             }
             return false;
+        }
+
+        public async Task GetTransactions(ulong id)
+        {
+            _toast.ShowInfo("Trying to get history");
+            var web3 = new Web3(_config.RpcUrl);
+            var transactionEventHandler = web3.Eth.GetEvent<TransactionEventDTO>(_config.ContractAddress);
+            var filter = transactionEventHandler.CreateFilterInput(
+                fromBlock: new BlockParameter(25742712),
+                toBlock: new BlockParameter(25742805));
+
+            //var filter = transactionEventHandler.CreateFilterInput(toBlock: new BlockParameter(25742805));
+            var logs = await transactionEventHandler.GetAllChangesAsync(filter);
+
+            if (logs.Count == 0)
+                Console.WriteLine("none");
+
+            foreach (var logItem in logs)
+                Console.WriteLine(
+                    $"tx:{logItem.Log.TransactionHash} " +
+                    $"id:{logItem.Event.Id} " +
+                    $"cid:{logItem.Event.Cid} " +
+                    $"type:{logItem.Event.ChangeType}");
+
+            // var transferEventHandler = web3.Eth.GetEvent<TransferEventDTO>(contractAddress);
+            // var filterAllTransferEventsForContract = transferEventHandler.CreateFilterInput();
+            //  var allTransferEventsForContract = await transferEventHandler.GetAllChanges(filterAllTransferEventsForContract);
         }
     }
 }

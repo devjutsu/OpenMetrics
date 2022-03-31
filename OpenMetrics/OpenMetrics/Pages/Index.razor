@@ -57,9 +57,9 @@ else
         </div>
     }
 
-    <ListMetricsComponent Metrics=Metrics OnSelect=SelectMetric />
+    <ListMetricsComponent Metrics=AppState.Metrics OnSelect=SelectMetric />
 
-    <ShowMetricComponent Metric=SelectedMetric OnApprove=Approve />
+    <ShowMetricComponent Metric=AppState.SelectedMetric OnApprove=Approve />
 }
 
 @code {
@@ -68,8 +68,6 @@ else
     bool ProperChain => AppState.ChainId == CFG.NetworkId;
     string NeededChain => NetworksList.Networks[CFG.NetworkId];
     bool AddingMetrics = false;
-    List<Metric> Metrics = new List<Metric>();
-    Metric SelectedMetric = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -189,7 +187,7 @@ else
             if (!string.IsNullOrEmpty(added))
             {
                 metric = await Blockchain.GetMetric(metric.Id);
-                Metrics.Add(metric);
+                AppState.AddMetric(this, metric);
             }
             AddingMetrics = false;
         }
@@ -202,19 +200,20 @@ else
 
     async Task GetAllMetrics()
     {
-        Metrics.Clear();
-        SelectedMetric = null;
+        AppState.SetMetrics(this, new List<Metric>());
+        AppState.SetSelectedMetric(this, null);
+
         for (ulong i = 1; i <= AppState.MetricsCount; i++)
         {
             var item = await Blockchain.GetMetric(i);
-            Metrics.Add(item);
+            AppState.AddMetric(this, item);
             StateHasChanged();
         }
     }
 
     async Task SelectMetric(Metric m)
     {
-        SelectedMetric = m;
+        AppState.SetSelectedMetric(this, m);
         StateHasChanged();
     }
 

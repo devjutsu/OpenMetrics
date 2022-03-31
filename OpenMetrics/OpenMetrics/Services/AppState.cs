@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using OpenMetrics.ViewModels;
 
 namespace OpenMetrics.Services
 {
@@ -11,6 +12,8 @@ namespace OpenMetrics.Services
         public ulong MetricsCount { get; private set; } = 0;
         public bool IsSuperuser => AccountId.ToLower() == "0x47B40160f72C4321E08DE8B95E262e902c991cD3".ToLower();
         public AppScreenMode ScreenMode { get; private set; } = AppScreenMode.All;
+        public Metric SelectedMetric { get; set; } = null;
+        public List<Metric> Metrics { get; set; } = new List<Metric>();
 
 
         public string AccountToShow()
@@ -32,6 +35,24 @@ namespace OpenMetrics.Services
         {
             this.MetricsCount = metricsCount;
             NotifyStateChanged(source, "MetricCount");
+        }
+
+        public void AddMetric(ComponentBase source, Metric metric)
+        {
+            this.Metrics.Add(metric);
+            NotifyStateChanged(source, "Metrics");
+        }
+
+        public void SetMetrics(ComponentBase source, List<Metric> metrics)
+        {
+            this.Metrics = metrics;
+            NotifyStateChanged(source, "Metrics");
+        }
+
+        public void SetSelectedMetric(ComponentBase source, Metric metric)
+        {
+            this.SelectedMetric = metric;
+            NotifyStateChanged(source, "SelectedMetric");
         }
 
         public void SetScreenMode(ComponentBase source, AppScreenMode mode)

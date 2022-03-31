@@ -87,14 +87,15 @@ namespace OpenMetrics.Services
         {
             try
             {
+                Console.WriteLine("Checking approved");
                 var web3 = new Web3(_config.RpcUrl);
-                var args = new ApprovesCount() { };
-                var queryHandler = web3.Eth.GetContractQueryHandler<ApprovesCount>();
+                var args = new ApprovedCount() { };
+                var queryHandler = web3.Eth.GetContractQueryHandler<ApprovedCount>();
                 var resp = await queryHandler
                                     .QueryAsync<BigInteger>(_config.ContractAddress, args)
                                     .ConfigureAwait(false);
 
-                Console.WriteLine($"Metrics count: {resp}");
+                Console.WriteLine($"Approved count: {resp}");
                 return resp;
             }
             catch (Exception ex)
@@ -180,19 +181,19 @@ namespace OpenMetrics.Services
 
         public async Task GetTransactions(ulong id)
         {
-            _toast.ShowInfo("Trying to get history");
-            var web3 = new Web3(_config.RpcUrl);
-            var transactionEventHandler = web3.Eth.GetEvent<TransactionEventDTO>(_config.ContractAddress);
-            //var filter = transactionEventHandler.CreateFilterInput(
-            //    fromBlock: new BlockParameter(25746500)
-            //    //toBlock: new BlockParameter(25746540)
-            //    );
+            //_toast.ShowInfo("Trying to get history");
+            //var web3 = new Web3(_config.RpcUrl);
+            //var transactionEventHandler = web3.Eth.GetEvent<TransactionEventDTO>(_config.ContractAddress);
+            ////var filter = transactionEventHandler.CreateFilterInput(
+            ////    fromBlock: new BlockParameter(25746500)
+            ////    //toBlock: new BlockParameter(25746540)
+            ////    );
 
 
-            var filterInput = transactionEventHandler.CreateFilterInput();
-            var topic = filterInput.Topics.FirstOrDefault();
-            Console.WriteLine($"Got: {topic}");
-            Console.WriteLine($"addr: {filterInput.Address[0]}");
+            //var filterInput = transactionEventHandler.CreateFilterInput();
+            //var topic = filterInput.Topics.FirstOrDefault();
+            //Console.WriteLine($"Got: {topic}");
+            //Console.WriteLine($"addr: {filterInput.Address[0]}");
 
             //var allEvents = await transactionEventHandler.GetAllChangesAsync(filterInput);
             //Console.WriteLine($"allEvents: {allEvents.Count}");

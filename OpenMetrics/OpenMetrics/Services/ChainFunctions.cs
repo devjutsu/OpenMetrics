@@ -20,7 +20,7 @@ public class MetricsCount : FunctionMessage
 }
 
 [Function("countApproved", "uint256")]
-public class ApprovesCount : FunctionMessage
+public class ApprovedCount : FunctionMessage
 {
 }
 

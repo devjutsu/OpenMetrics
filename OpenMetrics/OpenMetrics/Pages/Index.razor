@@ -60,6 +60,9 @@ else
     <ListMetricsComponent Metrics=AppState.Metrics OnSelect=SelectMetric />
     
     <ShowMetricComponent Metric=AppState.SelectedMetric OnApprove=Approve />
+
+    <button class="btn btn-warning" @onclick="@(() => GetApprovedCount())">Get Approves count</button>
+    
 }
 
 @code {
@@ -223,6 +226,13 @@ else
         await Blockchain.ApproveMetric(m.Id);
         Spinning = false;
         await GetAllMetrics();
+    }
+
+    async Task GetApprovedCount()
+    {
+        Spinning = true;
+        await Blockchain.ApprovedCount();
+        Spinning = false;
     }
 
     // ----

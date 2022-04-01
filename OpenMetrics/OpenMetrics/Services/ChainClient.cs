@@ -119,6 +119,12 @@ namespace OpenMetrics.Services
             var result = await funcHandler.CallDeserializingToObjectAsync<ApprovedListDTO>();
             Console.WriteLine($"Debug 2");
 
+            if(result.Approved == null)
+            {
+                Console.WriteLine("nil");
+                return new List<ulong>();
+            }    
+
             var ids = result.Approved.Select(o => (ulong)o).ToList();
 
             Console.WriteLine($"got approved: {result.Approved.Count}");
@@ -127,7 +133,7 @@ namespace OpenMetrics.Services
 
         public async Task<string> SubmitMetric(Metric metric)
         {
-            var hash = "0x1234567812345678123456781234567812345678123456781234567812345678";
+            var hash = "0x1234567812345678123456781234567812345678123456781234567812345678"; 
 
             try
             {
@@ -172,6 +178,8 @@ namespace OpenMetrics.Services
                     _toast.ShowError($"Please, switch to chain: {NetworksList.Networks[_config.NetworkId]}");
                     return false;
                 }
+
+                Console.WriteLine($"Call approve for id: {id}");
 
                 var web3 = new Web3(_config.RpcUrl);
                 var parameters = new Parameter[] {

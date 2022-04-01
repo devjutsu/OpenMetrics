@@ -57,7 +57,6 @@ contract OpenMetrics {
 
     function submitMetric(string memory _cid, bytes32 _checksum) public {
         if(true) { // @! checks
-            metricsCount++;
 
             Metrics[metricsCount] = Metric({
                 creator: msg.sender, 
@@ -72,6 +71,8 @@ contract OpenMetrics {
                             // msg.sender, 
                             // TransactionType.Add, 
                             _cid);
+                            
+            metricsCount++;
         }
     }
 
@@ -129,7 +130,7 @@ contract OpenMetrics {
 
     function countApproved() public view returns (uint256) {
         uint256 count = 0;
-        for(uint256 i = 0; i<metricsCount; i++) {
+        for(uint256 i = 1; i <= metricsCount; i++) {
             if(Metrics[i].status == Status.Approved) {
                 count ++;
             }
@@ -137,22 +138,27 @@ contract OpenMetrics {
         return count;
     }
 
-    function metricsApproved() public view returns (uint256[] memory) {
+    function metricsApproved() public view returns (uint256[] memory approved) {
         uint256 count = countApproved();
         uint256[] memory approves = new uint256[](count);
         uint256 j = 0;
-        for(uint256 i = 0; i<metricsCount; i++) {
-            if(Metrics[i].status == Status.Approved) {
+        for(uint256 i = 0; i < metricsCount; i++) {
+            if(Metrics[i].status == Status.Approved && j < count) {
                 approves[j] = i;
+                j++;
             }
-            j++;
         }
+
+        // uint256[] memory approves = new uint256[](3);
+        // approves[0] = 5;
+        // approves[1] = 7;
+        // approves[2] = 9;
         return approves;
     }
 
-    function countPosted() public view returns (uint256) {
+    function countUnchecked() public view returns (uint256) {
         uint256 count = 0;
-        for(uint256 i = 0; i<metricsCount; i++) {
+        for(uint256 i = 0; i < metricsCount; i++) {
             if(Metrics[i].status == Status.Posted) {
                 count ++;
             }
@@ -160,16 +166,27 @@ contract OpenMetrics {
         return count;
     }
 
-    function metricsPosted() public view returns (uint256[] memory) {
-        uint256 count = countPosted();
-        uint256[] memory posts = new uint256[](count);
+    function metricsUnchecked() public view returns (uint256[] memory unverified) {
+        uint256 count = countUnchecked();
+        uint256[] memory data = new uint256[](count);
         uint256 j = 0;
-        for(uint256 i = 0; i<metricsCount; i++) {
+        for(uint256 i = 0; i < metricsCount; i++) {
             if(Metrics[i].status == Status.Posted) {
-                posts[j] = i;
+                data[j] = i;
             }
             j++;
         }
-        return posts;
+
+        // uint256[] memory data = new uint256[](metricsCount);  // -- working sample data
+        // for(uint i = 0; i < data.length; i++) {
+        //     data[i] = i;
+        // }
+
+        return data;
+    }
+
+    function clean() public {
+        metricsCount = 0;
+        approversCount = 0;
     }
 }

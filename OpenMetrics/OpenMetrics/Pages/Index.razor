@@ -58,13 +58,23 @@ else
     }
 
     <ListMetricsComponent Metrics=AppState.Metrics OnSelect=SelectMetric />
-    
+
     <ShowMetricComponent Metric=AppState.SelectedMetric OnApprove=Approve />
 
     <button class="btn btn-warning" @onclick="@(() => GetApprovedMetrics())">Get Approved Metrics</button>
-    @foreach(var item in AppState.ApprovedIds)
+
+    <div>Verified count: @AppState.ApprovedCount</div>
+    @foreach (var item in AppState.ApprovedIds)
     {
-        <div>@item</div>
+        <div>
+            <span>
+                id: @item
+            </span>
+            <span>
+                cid: @AppState.Metrics.FirstOrDefault(o => o.Id == item).Cid
+            </span>
+        </div>
+        @*<div>@item</div>*@
     }
 }
 
@@ -188,7 +198,8 @@ else
             var added = await Blockchain.SubmitMetric(metric);
 
             var metricsCount = AppState.MetricsCount;
-            metric.Id = ++metricsCount;
+            metric.Id = metricsCount;
+            metricsCount++;
             AppState.SetMetricCount(this, metricsCount);
 
             Console.WriteLine($"Added: {added}");
@@ -211,7 +222,7 @@ else
         AppState.SetMetrics(this, new List<Metric>());
         AppState.SetSelectedMetric(this, null);
 
-        for (ulong i = 1; i <= AppState.MetricsCount; i++)
+        for (ulong i = 0; i < AppState.MetricsCount; i++)
         {
             var item = await Blockchain.GetMetric(i);
             AppState.AddMetric(this, item);

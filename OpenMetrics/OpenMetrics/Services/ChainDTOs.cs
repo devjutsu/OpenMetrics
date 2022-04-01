@@ -51,7 +51,7 @@ namespace OpenMetrics.Services
     [FunctionOutput]
     public class HistoryRecordDTO : IFunctionOutputDTO
     {
-        [Parameter("string", "author", 1)]
+        [Parameter("address", "author", 1)]
         public string Author { get; set; }
 
         [Parameter("uint8", "status", 2)]

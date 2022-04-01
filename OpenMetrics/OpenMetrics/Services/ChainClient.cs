@@ -254,14 +254,14 @@ namespace OpenMetrics.Services
             var contract = web3.Eth.GetContract(abi, _config.ContractAddress);
 
             Console.WriteLine($"Debug GetHistoryRecord for id {id}");
-            var funcHandler = contract.GetFunction("getHistoryRecord");
+            var funcHandler = contract.GetFunction("historyRecord");
             Console.WriteLine($"Debug 1");
             var parameters = new Parameter[] { 
                 new Parameter(type: "uint256", name: "_id", order: 1),
                 new Parameter(type: "uint256", name: "_n", order: 2)
             };
 
-            var result = await funcHandler.CallDeserializingToObjectAsync<HistoryRecordDTO>(parameters);
+            var result = await funcHandler.CallDeserializingToObjectAsync<HistoryRecordDTO>(id);
             Console.WriteLine($"Debug 2");
 
             return result;

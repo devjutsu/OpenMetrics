@@ -50,7 +50,7 @@
             for(ulong i = 0; i < count; i++)
             {
                 var rec = await Blockchain.GetHistoryRecord(Metric.Id, i);
-                @*Console.WriteLine($"{rec.Author} : {rec.Status}");*@
+                Console.WriteLine($"{rec.Author} : {rec.Status}");
             }
 
             @*var history = await Blockchain.GetHistory(Metric.Id);

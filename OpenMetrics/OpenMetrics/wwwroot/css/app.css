@@ -63,6 +63,42 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
+.blazored-toast-message {
+    font-size: 24px;
+}
+
+@media (max-width: 576px) {
+    .blazored-toast-message {
+        font-size: 18px;
+    }
+}
+
+.blazored-toast-info {
+    background-color: #a472f8a9; /* #8248e5bb;*/
+    color: #f6f1ffe2; /*#474848;*/
+}
+
+    .blazored-toast-info .blazored-toast-heading {
+        color: #e5d6ffa9;
+    }
+
+.blazored-toast-warning {
+    background-color: #ff8500c0;
+}
+
+    .blazored-toast-warning .blazored-toast-heading {
+        color: #ffda73c0;
+    }
+
+.blazored-toast-error {
+    background-color: #8b1700b9;
+}
+
+    .blazored-toast-error .blazored-toast-heading {
+        color: #6c1d1d;
+    }
+
+
 .table-metric-line {
     cursor: pointer;
 }

@@ -34,10 +34,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine($"showing info: {Metric?.Id}");
         if(Metric != null)
         {
-            Console.WriteLine("show metric");
+            Console.WriteLine($"show initialize for: {Metric?.Id}");
             await Blockchain.GetTransactions(Metric.Id);
         }
     }
@@ -46,7 +45,7 @@
     {
         if(Metric != null)
         {
-            Console.WriteLine("show metric");
+            Console.WriteLine("show render");
             await Blockchain.GetTransactions(Metric.Id);
         }
     }

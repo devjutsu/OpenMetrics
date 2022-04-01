@@ -133,6 +133,17 @@ else
     private async Task MetaMaskService_ChainChangedEvent((long, Chain) arg)
     {
         await GetSelectedNetwork();
+
+        var metricsCount = (ulong)(await Blockchain.MetricsCount());
+        AppState.SetMetricCount(this, metricsCount);
+
+        await GetApprovedCount();
+
+        if (AppState.MetricsCount > 0)
+        {
+            await GetAllMetrics();
+            await GetApprovedMetrics();
+        }
     }
 
     private async Task MetaMaskService_AccountChangedEvent(string arg)

@@ -46,7 +46,7 @@ namespace OpenMetrics.Services
         public void SetApprovedCount(ComponentBase source, ulong approvedCount)
         {
             this.ApprovedCount = approvedCount;
-            this.UncheckedCount = MetricsCount - approvedCount;
+            this.UncheckedCount =  MetricsCount > 0 ? (MetricsCount - approvedCount) : 0;
             NotifyStateChanged(source, "ApprovedCount");
             NotifyStateChanged(source, "UncheckedCount");
         }

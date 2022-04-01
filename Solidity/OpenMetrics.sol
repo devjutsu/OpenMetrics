@@ -11,6 +11,8 @@ contract OpenMetrics {
     mapping(address => uint256) approvers;
     uint256 public approversCount;
 
+    mapping(uint256 => MetricHistory) History;
+
     struct Metric {
         address creator;
         address editor;
@@ -27,20 +29,15 @@ contract OpenMetrics {
         Rejected
     }
 
-    event Transaction (
-        uint256 id,
-        // address author,
-        // TransactionType changeType,
-        string cid
-    );
-
-    enum TransactionType {
-        Add,
-        Update,
-        Approve
+    struct MetricHistory {
+        mapping(uint256 => HistoryRecord) records;
+        uint256 count;
     }
 
-    event Log(address indexed sender, uint256 metricId);
+    struct HistoryRecord {
+        address author;
+        Status status;
+    }
 
     constructor() payable {
         owner = payable(msg.sender);
@@ -67,31 +64,33 @@ contract OpenMetrics {
                 checksum: _checksum
             });
 
-            emit Transaction(metricsCount, 
-                            // msg.sender, 
-                            // TransactionType.Add, 
-                            _cid);
+            History[metricsCount].records[0].status = Status.Posted;
+            History[metricsCount].records[0].author = msg.sender;
+            History[metricsCount].count = 1;
 
             metricsCount++;
         }
     }
 
-    // function editMetric(uint256 _id, string memory _cid, bytes32 _checksum) public {
-    //     Metric storage prev = Metrics[_id];
+    function getHistoryRecordCount(uint256 _id) public view returns (uint256) {
+        return History[_id].count;
+    }
 
-    //     if(true) { // @! do checks
+    function getHistoryRecord(uint256 _id, uint256 _n) public view returns (HistoryRecord memory) {
+        return History[_id].records[_n];
+    }
 
-    //         // Metrics[_id] = Metric({
-    //         //     creator: prev.creator, 
-    //         //     editor: msg.sender,
-    //         //     approver: address(0), 
-    //         //     status: Status.None, 
-    //         //     cid: _cid, 
-    //         //     checksum: _checksum
-    //         //     // history: new Change[](0)
-    //         // });
-    //     }
-    // }
+    function getHistory(uint256 _id) public view returns (HistoryRecord[] memory history) {
+        uint256 count = History[_id].count;
+
+        HistoryRecord[] memory records = new HistoryRecord[](count);
+        for(uint256 i = 0; i < count; i++) {
+            records[i].status = History[_id].records[i].status;
+            records[i].author = History[_id].records[i].author;
+        }
+        return records;
+    }
+
 
     function deleteMetric(uint256 _id) public {
         if(true) { // @! checks
@@ -102,6 +101,11 @@ contract OpenMetrics {
     function approveMetric(uint256 _id) public {
         if(true) {
             Metrics[_id].status = Status.Approved;
+
+            uint256 count = History[metricsCount].count;
+            History[_id].records[count].status = Status.Approved;
+            History[_id].records[count].author = msg.sender;
+            History[_id].count = count + 1;
         }
     }
 

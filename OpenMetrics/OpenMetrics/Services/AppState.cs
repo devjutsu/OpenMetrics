@@ -41,6 +41,7 @@ namespace OpenMetrics.Services
         {
             this.MetricsCount = metricsCount;
             NotifyStateChanged(source, "MetricCount");
+            NotifyStateChanged(source, "UncheckedCount");
         }
 
         public void SetApprovedCount(ComponentBase source, ulong approvedCount)

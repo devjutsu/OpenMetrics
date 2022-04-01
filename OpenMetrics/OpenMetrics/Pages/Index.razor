@@ -224,6 +224,8 @@ else
             metricsCount++;
             AppState.SetMetricCount(this, metricsCount);
 
+            AppState.SetApprovedCount(this, AppState.ApprovedCount);
+
             Console.WriteLine($"Added: {added}");
             if (!string.IsNullOrEmpty(added))
             {
@@ -254,6 +256,7 @@ else
 
     async Task SelectMetric(Metric m)
     {
+        Spinning = true;
         AppState.SetSelectedMetric(this, m);
         StateHasChanged();
         CurrentItemHistory = new List<HistoryRecordDTO>();
@@ -265,6 +268,7 @@ else
             CurrentItemHistory.Add(rec);
             Console.WriteLine($"{rec.Author} : {rec.Status}");
         }
+        Spinning = false;
     }
 
     async Task Approve(Metric m)

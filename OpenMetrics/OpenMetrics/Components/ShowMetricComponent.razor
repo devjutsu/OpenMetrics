@@ -7,9 +7,6 @@
         
         <div>Id: @Metric.Id</div>
         <div>CID: @Metric.Cid</div>
-        <div>Creator: @Metric.Creator</div>
-        <div>Editor: @Metric.Creator</div>
-        <div>Approver: @Metric.Approver</div>
         <div>Status: @Metric.Status</div>
         <div>Checksum: @Metric.Checksum.ToHex()</div>
     </div>
@@ -24,6 +21,7 @@
         <table class="table table-bordered">
         <thead>
             <tr>
+                <th scope="col">#</th>
                 <th scope="col">Author</th>
                 <th scope="col">Status</th>
             </tr>
@@ -33,11 +31,17 @@
         {
             <tr class="">
                 <td scope="row">
+                    @rec.Id
+                </td>
+                <td scope="row">
                     @rec.Author
                 </td>
                 <td>
                     @rec.StatusText()
                 </td>
+                @*<td scope="row">
+                    @rec.Cid
+                </td>*@
             </tr>
         }
         </tbody>

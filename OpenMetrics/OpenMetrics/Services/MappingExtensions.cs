@@ -8,11 +8,8 @@ namespace OpenMetrics.Services
         {
             return new Metric()
             {
-                Approver = metricDto.Approver,
                 Checksum = metricDto.Checksum,
                 Cid = metricDto.Cid,
-                Creator = metricDto.Creator,
-                Editor = metricDto.Editor,
                 Status = metricDto.Status,
                 Id = id
             };

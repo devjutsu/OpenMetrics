@@ -12,22 +12,13 @@ namespace OpenMetrics.Services
     [FunctionOutput]
     public class MetricsDTO : IFunctionOutputDTO
     {
-        [Parameter("address", "creator", 1)]
-        public string Creator { get; set; }
-
-        [Parameter("address", "editor", 2)]
-        public string Editor { get; set; }
-
-        [Parameter("address", "approver", 3)]
-        public string Approver { get; set; }
-
-        [Parameter("uint8", "status", 4)]
+        [Parameter("uint8", "status", 1)]
         public int Status { get; set; }
 
-        [Parameter("string", "cid", 5)]
+        [Parameter("string", "cid", 2)]
         public string Cid { get; set; }
 
-        [Parameter("bytes32", "checksum", 6)]
+        [Parameter("bytes32", "checksum", 3)]
         public byte[] Checksum { get; set; }
 
         //[Parameter("uint256", "id", 1)]
@@ -51,10 +42,14 @@ namespace OpenMetrics.Services
     [FunctionOutput]
     public class HistoryRecordDTO : IFunctionOutputDTO
     {
-        [Parameter("address", "author", 1)]
+        [Parameter("uint256", "id", 1)]
+        public BigInteger Id { get; set; }
+        [Parameter("address", "author", 2)]
         public string Author { get; set; }
 
-        [Parameter("uint8", "status", 2)]
+        [Parameter("uint8", "status", 3)]
         public BigInteger Status { get; set; }
+        [Parameter("string", "cid", 4)]
+        public string Cid { get; set; }
     }
 }

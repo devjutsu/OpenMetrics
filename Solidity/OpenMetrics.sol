@@ -14,9 +14,6 @@ contract OpenMetrics {
     mapping(uint256 => MetricHistory) History;
 
     struct Metric {
-        address creator;
-        address editor;
-        address approver;
         Status status;
         string cid;
         bytes32 checksum;
@@ -35,8 +32,10 @@ contract OpenMetrics {
     }
 
     struct HistoryRecord {
+        uint256 id;
         address author;
         Status status;
+        // string cid;
     }
 
     constructor() payable {
@@ -56,9 +55,6 @@ contract OpenMetrics {
         if(true) { // @! checks
 
             Metrics[metricsCount] = Metric({
-                creator: msg.sender, 
-                editor: msg.sender,
-                approver: address(0), 
                 status: Status.Posted, 
                 cid: _cid, 
                 checksum: _checksum
@@ -108,8 +104,11 @@ contract OpenMetrics {
             Metrics[_id].status = Status.Approved;
 
             uint256 count = History[_id].count;
+            History[_id].records[count].id = count;
             History[_id].records[count].status = Status.Approved;
             History[_id].records[count].author = msg.sender;
+            // History[_id].records[count].cid = History[_id].records[count-1].cid;
+
             History[_id].count = count + 1;
         }
     }

@@ -15,21 +15,6 @@
     "name": "Metrics",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "editor",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "approver",
-        "type": "address"
-      },
-      {
         "internalType": "enum OpenMetrics.Status",
         "name": "status",
         "type": "uint8"
@@ -164,6 +149,11 @@
       {
         "components": [
           {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
             "internalType": "address",
             "name": "author",
             "type": "address"
@@ -199,6 +189,11 @@
     "outputs": [
       {
         "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
           {
             "internalType": "address",
             "name": "author",
@@ -273,6 +268,11 @@
     "outputs": [
       {
         "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
           {
             "internalType": "address",
             "name": "author",

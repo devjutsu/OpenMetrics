@@ -16,6 +16,9 @@ namespace OpenMetrics.Services
         public Metric SelectedMetric { get; private set; } = null;
         public List<Metric> Metrics { get; private set; } = new List<Metric>();
 
+        public List<Metric> ApprovedMetrics => Metrics.Where(o => ApprovedIds.Contains(o.Id)).ToList();
+        public List<Metric> UncheckedMetrics => Metrics.Where(o => !ApprovedIds.Contains(o.Id)).ToList();
+
         public bool IsAuthenticated => AccountId != null && !string.IsNullOrWhiteSpace(AccountId);
         public bool IsSuperuser => AccountId.ToLower() == "0x47B40160f72C4321E08DE8B95E262e902c991cD3".ToLower();
 
@@ -69,7 +72,9 @@ namespace OpenMetrics.Services
         public void SetScreenMode(ComponentBase source, AppScreenMode mode)
         {
             this.ScreenMode = mode;
+            SelectedMetric = null;
             NotifyStateChanged(source, "ScreenMode");
+            NotifyStateChanged(source, "SelectedMetric");
         }
 
         public void SetChain(ComponentBase source, long chainId)

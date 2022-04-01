@@ -44,8 +44,6 @@ else if (!ProperChain)
 }
 else
 {
-    <ListMetricsComponent />
-
     @if (AddingMetrics)
     {
         <AddMetricComponent DoneAdding=DoneAdding />
@@ -57,13 +55,25 @@ else
         </div>
     }
 
-    <ListMetricsComponent Metrics=AppState.Metrics OnSelect=SelectMetric />
+
+    if(AppState.ScreenMode == AppScreenMode.Unchecked)
+    {
+        <ListMetricsComponent Metrics=AppState.UncheckedMetrics OnSelect=SelectMetric />
+    }
+    else if(AppState.ScreenMode == AppScreenMode.Verified)
+    {
+        <ListMetricsComponent Metrics=AppState.ApprovedMetrics OnSelect=SelectMetric />
+    }
+    else
+    {
+        <ListMetricsComponent Metrics=AppState.Metrics OnSelect=SelectMetric />
+    }
 
     <ShowMetricComponent Metric=AppState.SelectedMetric OnApprove=Approve />
 
-    <button class="btn btn-warning" @onclick="@(() => GetApprovedMetrics())">Get Approved Metrics</button>
+    @*<button class="btn btn-warning" @onclick="@(() => GetApprovedMetrics())">Get Approved Metrics</button>*@
 
-    <div>Verified count: @AppState.ApprovedCount</div>
+    @*<div>Verified count: @AppState.ApprovedCount</div>
     @foreach (var item in AppState.ApprovedIds)
     {
         <div>
@@ -71,11 +81,10 @@ else
                 id: @item
             </span>
             <span>
-                cid: @AppState.Metrics.FirstOrDefault(o => o.Id == item).Cid
+                cid: @AppState.Metrics.FirstOrDefault(o => o.Id == item)?.Cid
             </span>
         </div>
-        @*<div>@item</div>*@
-    }
+    }*@
 }
 
 @code {
@@ -117,6 +126,7 @@ else
         if (AppState.MetricsCount > 0)
         {
             await GetAllMetrics();
+            await GetApprovedMetrics();
         }
     }
 

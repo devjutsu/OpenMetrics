@@ -71,7 +71,7 @@ contract OpenMetrics {
                             // msg.sender, 
                             // TransactionType.Add, 
                             _cid);
-                            
+
             metricsCount++;
         }
     }
@@ -130,7 +130,7 @@ contract OpenMetrics {
 
     function countApproved() public view returns (uint256) {
         uint256 count = 0;
-        for(uint256 i = 1; i <= metricsCount; i++) {
+        for(uint256 i = 0; i < metricsCount; i++) {
             if(Metrics[i].status == Status.Approved) {
                 count ++;
             }

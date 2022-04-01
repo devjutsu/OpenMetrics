@@ -37,7 +37,7 @@
         if(Metric != null)
         {
             Console.WriteLine($"show initialize for: {Metric?.Id}");
-            await Blockchain.GetTransactions(Metric.Id);
+            await Blockchain.GetHistoryRecordsCount(Metric.Id);
         }
     }
 
@@ -45,8 +45,20 @@
     {
         if(Metric != null)
         {
-            Console.WriteLine("show render");
-            await Blockchain.GetTransactions(Metric.Id);
+            var count = await Blockchain.GetHistoryRecordsCount(Metric.Id);
+
+            for(ulong i = 0; i < count; i++)
+            {
+                var rec = await Blockchain.GetHistoryRecord(Metric.Id, i);
+                @*Console.WriteLine($"{rec.Author} : {rec.Status}");*@
+            }
+
+            @*var history = await Blockchain.GetHistory(Metric.Id);
+            Console.WriteLine($"Got history records: {history.Count}");
+            foreach(var rec in history)
+            {
+                Console.WriteLine($"{rec.Author} : {rec.Status}");
+            }*@
         }
     }
 }

@@ -19,9 +19,11 @@ namespace OpenMetrics.Services
         Task<string> SubmitMetric(Metric metric);
         Task<Metric> GetMetric(ulong id);
         Task<bool> ApproveMetric(ulong id);
-        Task GetTransactions(ulong id);
         Task<BigInteger> ApprovedCount();
         Task<List<ulong>> GetApprovedMetrics();
+        Task<ulong> GetHistoryRecordsCount(ulong id);
+        Task<List<HistoryRecordDTO>> GetHistory(ulong id);
+        Task<HistoryRecordDTO> GetHistoryRecord(ulong id, ulong n);
     }
 
     public class ChainClient : IChain
@@ -118,11 +120,11 @@ namespace OpenMetrics.Services
             var result = await funcHandler.CallDeserializingToObjectAsync<ApprovedListDTO>();
             Console.WriteLine($"Debug 2");
 
-            if(result.Approved == null)
+            if (result.Approved == null)
             {
                 Console.WriteLine("nil");
                 return new List<ulong>();
-            }    
+            }
 
             var ids = result.Approved.Select(o => (ulong)o).ToList();
 
@@ -132,7 +134,7 @@ namespace OpenMetrics.Services
 
         public async Task<string> SubmitMetric(Metric metric)
         {
-            var hash = "0x1234567812345678123456781234567812345678123456781234567812345678"; 
+            var hash = "0x1234567812345678123456781234567812345678123456781234567812345678";
 
             try
             {
@@ -143,7 +145,7 @@ namespace OpenMetrics.Services
                 }
 
                 var web3 = new Web3(_config.RpcUrl);
-                var parameters = new Parameter[] { 
+                var parameters = new Parameter[] {
                     new Parameter(type: "string", name: "_cid", order: 1),
                     new Parameter(type: "bytes32", name: "_checksum", order: 2)
                 };
@@ -206,49 +208,64 @@ namespace OpenMetrics.Services
             return false;
         }
 
-        public async Task GetTransactions(ulong id)
+        public async Task<ulong> GetHistoryRecordsCount(ulong id)
         {
             _toast.ShowInfo("Trying to get history");
+            var web3 = new Web3(_config.RpcUrl);
+            var queryHandler = web3.Eth.GetContractQueryHandler<GetHistoryRecordCount>();
+            var args = new GetHistoryRecordCount() { Id = new BigInteger(id) };
+            var resp = await queryHandler
+                                .QueryAsync<BigInteger>(_config.ContractAddress, args)
+                                .ConfigureAwait(false);
 
-
-            //_toast.ShowInfo("Trying to get history");
-            //var web3 = new Web3(_config.RpcUrl);
-            //var transactionEventHandler = web3.Eth.GetEvent<TransactionEventDTO>(_config.ContractAddress);
-            ////var filter = transactionEventHandler.CreateFilterInput(
-            ////    fromBlock: new BlockParameter(25746500)
-            ////    //toBlock: new BlockParameter(25746540)
-            ////    );
-
-
-            //var filterInput = transactionEventHandler.CreateFilterInput();
-            //var topic = filterInput.Topics.FirstOrDefault();
-            //Console.WriteLine($"Got: {topic}");
-            //Console.WriteLine($"addr: {filterInput.Address[0]}");
-
-            //var allEvents = await transactionEventHandler.GetAllChangesAsync(filterInput);
-            //Console.WriteLine($"allEvents: {allEvents.Count}");
-
-
-            //var filter = transactionEventHandler.CreateFilterInput();
-            //var logs = await transactionEventHandler.GetAllChangesAsync(filter);
-            //Console.WriteLine($"Got events: {logs.Count}");
-
-
-            //var filter = transactionEventHandler.CreateFilterInput(fromBlock: new BlockParameter(25746530));
-            //var logs = await transactionEventHandler.GetAllChangesAsync(filter);
-            //Console.WriteLine($"Got events: {logs.Count}");
-
-            //foreach (var logItem in logs)
-            //    Console.WriteLine(
-            //        $"tx:{logItem.Log.TransactionHash} " +
-            //        $"id:{logItem.Event.Id} " +
-            //        $"cid:{logItem.Event.Cid} " //+
-            //        //$"type:{logItem.Event.ChangeType}"
-            //        );
-
-            // var transferEventHandler = web3.Eth.GetEvent<TransferEventDTO>(contractAddress);
-            // var filterAllTransferEventsForContract = transferEventHandler.CreateFilterInput();
-            //  var allTransferEventsForContract = await transferEventHandler.GetAllChanges(filterAllTransferEventsForContract);
+            Console.WriteLine($"History Records Count: {resp}");
+            return (uint)resp;
         }
+
+        public async Task<List<HistoryRecordDTO>> GetHistory(ulong id)
+        {
+            var web3 = new Web3(_config.RpcUrl);
+
+            var abi = await _http.GetStringAsync("abi.json");
+            var contract = web3.Eth.GetContract(abi, _config.ContractAddress);
+
+            Console.WriteLine($"Debug GetHistory for id {id}");
+            var funcHandler = contract.GetFunction("getHistory");
+            Console.WriteLine($"Debug 1");
+            var result = await funcHandler.CallDeserializingToObjectAsync<HistoryDTO>(id);
+            Console.WriteLine($"Debug 2");
+
+            if (result?.Records == null)
+            {
+                Console.WriteLine("nil");
+                return new List<HistoryRecordDTO>();
+            }
+            else
+            {
+                return result.Records;
+            }
+        }
+
+        public async Task<HistoryRecordDTO> GetHistoryRecord(ulong id, ulong n)
+        {
+            var web3 = new Web3(_config.RpcUrl);
+
+            var abi = await _http.GetStringAsync("abi.json");
+            var contract = web3.Eth.GetContract(abi, _config.ContractAddress);
+
+            Console.WriteLine($"Debug GetHistoryRecord for id {id}");
+            var funcHandler = contract.GetFunction("getHistoryRecord");
+            Console.WriteLine($"Debug 1");
+            var parameters = new Parameter[] { 
+                new Parameter(type: "uint256", name: "_id", order: 1),
+                new Parameter(type: "uint256", name: "_n", order: 2)
+            };
+
+            var result = await funcHandler.CallDeserializingToObjectAsync<HistoryRecordDTO>(parameters);
+            Console.WriteLine($"Debug 2");
+
+            return result;
+        }
+
     }
 }

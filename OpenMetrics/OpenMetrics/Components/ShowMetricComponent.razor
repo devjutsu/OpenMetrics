@@ -18,6 +18,31 @@
 
     <p>&nbsp;</p>
     <HistoryComponent />
+
+
+    <div style="margin-top: 1rem; margin-bottom: 1rem;">
+        <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Author</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var rec in History)
+        {
+            <tr class="table-metric-line">
+                <td scope="row">
+                    @rec.Author
+                </td>
+                <td>
+                    @rec.StatusText()
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    </div>
 }
 
 @code {
@@ -26,6 +51,7 @@
     [Parameter]
     public EventCallback<Metric> OnApprove { get; set; }
     bool BtnDisabled => Metric.Status == 2;
+    List<HistoryRecordDTO> History = new List<HistoryRecordDTO>();
 
     async Task Approve(Metric metric)
     {
@@ -45,11 +71,13 @@
     {
         if(Metric != null)
         {
+            History = new List<HistoryRecordDTO>();
             var count = await Blockchain.GetHistoryRecordsCount(Metric.Id);
 
             for(ulong i = 0; i < count; i++)
             {
                 var rec = await Blockchain.GetHistoryRecord(Metric.Id, i);
+                History.Add(rec);
                 Console.WriteLine($"{rec.Author} : {rec.Status}");
             }
 

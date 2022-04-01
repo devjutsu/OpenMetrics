@@ -17,5 +17,20 @@ namespace OpenMetrics.Services
                 Id = id
             };
         }
+
+        public static string StatusText(this HistoryRecordDTO dto)
+        {
+            switch((ulong)dto.Status)
+            {
+                case 1:
+                    return "Posted";
+                case 2:
+                    return "Approved";
+                case 3:
+                    return "Rejected";
+                default:
+                    return "None";
+            }
+        }
     }
 }

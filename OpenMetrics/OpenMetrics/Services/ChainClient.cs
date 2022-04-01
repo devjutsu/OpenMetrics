@@ -22,7 +22,7 @@ namespace OpenMetrics.Services
         Task<BigInteger> ApprovedCount();
         Task<List<ulong>> GetApprovedMetrics();
         Task<ulong> GetHistoryRecordsCount(ulong id);
-        Task<List<HistoryRecordDTO>> GetHistory(ulong id);
+        //Task<List<HistoryRecordDTO>> GetHistory(ulong id);
         Task<HistoryRecordDTO> GetHistoryRecord(ulong id, ulong n);
     }
 
@@ -222,29 +222,29 @@ namespace OpenMetrics.Services
             return (uint)resp;
         }
 
-        public async Task<List<HistoryRecordDTO>> GetHistory(ulong id)
-        {
-            var web3 = new Web3(_config.RpcUrl);
+        //public async Task<List<HistoryRecordDTO>> GetHistory(ulong id)
+        //{
+        //    var web3 = new Web3(_config.RpcUrl);
 
-            var abi = await _http.GetStringAsync("abi.json");
-            var contract = web3.Eth.GetContract(abi, _config.ContractAddress);
+        //    var abi = await _http.GetStringAsync("abi.json");
+        //    var contract = web3.Eth.GetContract(abi, _config.ContractAddress);
 
-            Console.WriteLine($"Debug GetHistory for id {id}");
-            var funcHandler = contract.GetFunction("getHistory");
-            Console.WriteLine($"Debug 1");
-            var result = await funcHandler.CallDeserializingToObjectAsync<HistoryDTO>(id);
-            Console.WriteLine($"Debug 2");
+        //    Console.WriteLine($"Debug GetHistory for id {id}");
+        //    var funcHandler = contract.GetFunction("getHistory");
+        //    Console.WriteLine($"Debug 1");
+        //    var result = await funcHandler.CallDeserializingToObjectAsync<HistoryDTO>(id);
+        //    Console.WriteLine($"Debug 2");
 
-            if (result?.Records == null)
-            {
-                Console.WriteLine("nil");
-                return new List<HistoryRecordDTO>();
-            }
-            else
-            {
-                return result.Records;
-            }
-        }
+        //    if (result?.Records == null)
+        //    {
+        //        Console.WriteLine("nil");
+        //        return new List<HistoryRecordDTO>();
+        //    }
+        //    else
+        //    {
+        //        return result.Records;
+        //    }
+        //}
 
         public async Task<HistoryRecordDTO> GetHistoryRecord(ulong id, ulong n)
         {
@@ -252,17 +252,9 @@ namespace OpenMetrics.Services
 
             var abi = await _http.GetStringAsync("abi.json");
             var contract = web3.Eth.GetContract(abi, _config.ContractAddress);
-
-            Console.WriteLine($"Debug GetHistoryRecord for id {id}");
             var funcHandler = contract.GetFunction("historyRecord");
-            Console.WriteLine($"Debug 1");
-            var parameters = new Parameter[] { 
-                new Parameter(type: "uint256", name: "_id", order: 1),
-                new Parameter(type: "uint256", name: "_n", order: 2)
-            };
 
-            var result = await funcHandler.CallDeserializingToObjectAsync<HistoryRecordDTO>(id);
-            Console.WriteLine($"Debug 2");
+            var result = await funcHandler.CallDeserializingToObjectAsync<HistoryRecordDTO>(id, n);
 
             return result;
         }

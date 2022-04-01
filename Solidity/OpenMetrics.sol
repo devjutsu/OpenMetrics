@@ -80,6 +80,11 @@ contract OpenMetrics {
         return History[_id].records[_n];
     }
 
+    function historyRecord(uint256 _id, uint256 _n) public view returns (HistoryRecord memory) {
+        //return HistoryRecord({status: Status.Posted, author: msg.sender});
+        return History[_id].records[_n];
+    }
+
     function getHistory(uint256 _id) public view returns (HistoryRecord[] memory history) {
         uint256 count = History[_id].count;
 
@@ -102,7 +107,7 @@ contract OpenMetrics {
         if(true) {
             Metrics[_id].status = Status.Approved;
 
-            uint256 count = History[metricsCount].count;
+            uint256 count = History[_id].count;
             History[_id].records[count].status = Status.Approved;
             History[_id].records[count].author = msg.sender;
             History[_id].count = count + 1;

@@ -41,16 +41,20 @@ namespace OpenMetrics.Services
         public List<BigInteger> Approved { get; set; }
     }
 
-    [Event("Transaction")]
-    public class TransactionEventDTO : IEventDTO
+    [FunctionOutput]
+    public class HistoryDTO : IFunctionOutputDTO
     {
-        [Parameter("uint256", "id", 1, false)]
-        public BigInteger Id { get; set; }
-        //[Parameter("address", "_from", 2, true)]
-        //public string author { get; set; }
-        //[Parameter("uint8", "changeType", 3, false)]
-        //public int ChangeType { get; set; }
-        [Parameter("string", "cid", 2, true)]
-        public string Cid { get; set; }
+        [Parameter("tuple[]", "history", 1)]
+        public List<HistoryRecordDTO> Records { get; set; }
+    }
+
+    [FunctionOutput]
+    public class HistoryRecordDTO : IFunctionOutputDTO
+    {
+        [Parameter("string", "author", 1)]
+        public string Author { get; set; }
+
+        [Parameter("uint8", "status", 2)]
+        public BigInteger Status { get; set; }
     }
 }

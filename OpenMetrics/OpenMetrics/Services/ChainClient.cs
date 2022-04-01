@@ -210,7 +210,6 @@ namespace OpenMetrics.Services
 
         public async Task<ulong> GetHistoryRecordsCount(ulong id)
         {
-            _toast.ShowInfo("Trying to get history");
             var web3 = new Web3(_config.RpcUrl);
             var queryHandler = web3.Eth.GetContractQueryHandler<GetHistoryRecordCount>();
             var args = new GetHistoryRecordCount() { Id = new BigInteger(id) };

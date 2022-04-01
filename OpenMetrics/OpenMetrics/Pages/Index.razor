@@ -56,11 +56,11 @@ else
     }
 
 
-    if(AppState.ScreenMode == AppScreenMode.Unchecked)
+    if (AppState.ScreenMode == AppScreenMode.Unchecked)
     {
         <ListMetricsComponent Metrics=AppState.UncheckedMetrics OnSelect=SelectMetric />
     }
-    else if(AppState.ScreenMode == AppScreenMode.Verified)
+    else if (AppState.ScreenMode == AppScreenMode.Verified)
     {
         <ListMetricsComponent Metrics=AppState.ApprovedMetrics OnSelect=SelectMetric />
     }
@@ -69,22 +69,22 @@ else
         <ListMetricsComponent Metrics=AppState.Metrics OnSelect=SelectMetric />
     }
 
-    <ShowMetricComponent Metric=AppState.SelectedMetric OnApprove=Approve />
+    <ShowMetricComponent Metric=AppState.SelectedMetric OnApprove=Approve History=CurrentItemHistory />
 
     @*<button class="btn btn-warning" @onclick="@(() => GetApprovedMetrics())">Get Approved Metrics</button>*@
 
     @*<div>Verified count: @AppState.ApprovedCount</div>
-    @foreach (var item in AppState.ApprovedIds)
-    {
+        @foreach (var item in AppState.ApprovedIds)
+        {
         <div>
-            <span>
-                id: @item
-            </span>
-            <span>
-                cid: @AppState.Metrics.FirstOrDefault(o => o.Id == item)?.Cid
-            </span>
+        <span>
+        id: @item
+        </span>
+        <span>
+        cid: @AppState.Metrics.FirstOrDefault(o => o.Id == item)?.Cid
+        </span>
         </div>
-    }*@
+        }*@
 }
 
 @code {
@@ -93,6 +93,7 @@ else
     bool ProperChain => AppState.ChainId == CFG.NetworkId;
     string NeededChain => NetworksList.Networks[CFG.NetworkId];
     bool AddingMetrics = false;
+    List<HistoryRecordDTO> CurrentItemHistory = new List<HistoryRecordDTO>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -255,6 +256,15 @@ else
     {
         AppState.SetSelectedMetric(this, m);
         StateHasChanged();
+        CurrentItemHistory = new List<HistoryRecordDTO>();
+        var count = await Blockchain.GetHistoryRecordsCount(m.Id);
+
+        for (ulong i = 0; i < count; i++)
+        {
+            var rec = await Blockchain.GetHistoryRecord(m.Id, i);
+            CurrentItemHistory.Add(rec);
+            Console.WriteLine($"{rec.Author} : {rec.Status}");
+        }
     }
 
     async Task Approve(Metric m)

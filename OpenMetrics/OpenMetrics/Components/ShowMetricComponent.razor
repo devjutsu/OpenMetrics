@@ -21,7 +21,7 @@
 
 
     <div style="margin-top: 1rem; margin-bottom: 1rem;">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered">
         <thead>
             <tr>
                 <th scope="col">Author</th>
@@ -31,7 +31,7 @@
         <tbody>
         @foreach (var rec in History)
         {
-            <tr class="table-metric-line">
+            <tr class="">
                 <td scope="row">
                     @rec.Author
                 </td>
@@ -50,8 +50,10 @@
     public Metric Metric { get; set; }
     [Parameter]
     public EventCallback<Metric> OnApprove { get; set; }
+    [Parameter]
+    public List<HistoryRecordDTO> History { get; set; }
+
     bool BtnDisabled => Metric.Status == 2;
-    List<HistoryRecordDTO> History = new List<HistoryRecordDTO>();
 
     async Task Approve(Metric metric)
     {
@@ -64,29 +66,6 @@
         {
             Console.WriteLine($"show initialize for: {Metric?.Id}");
             await Blockchain.GetHistoryRecordsCount(Metric.Id);
-        }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if(Metric != null)
-        {
-            History = new List<HistoryRecordDTO>();
-            var count = await Blockchain.GetHistoryRecordsCount(Metric.Id);
-
-            for(ulong i = 0; i < count; i++)
-            {
-                var rec = await Blockchain.GetHistoryRecord(Metric.Id, i);
-                History.Add(rec);
-                Console.WriteLine($"{rec.Author} : {rec.Status}");
-            }
-
-            @*var history = await Blockchain.GetHistory(Metric.Id);
-            Console.WriteLine($"Got history records: {history.Count}");
-            foreach(var rec in history)
-            {
-                Console.WriteLine($"{rec.Author} : {rec.Status}");
-            }*@
         }
     }
 }

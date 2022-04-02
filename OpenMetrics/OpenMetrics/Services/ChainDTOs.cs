@@ -20,9 +20,6 @@ namespace OpenMetrics.Services
 
         [Parameter("bytes32", "checksum", 3)]
         public byte[] Checksum { get; set; }
-
-        //[Parameter("uint256", "id", 1)]
-        //public int Id { get; set; }
     }
 
     [FunctionOutput]
@@ -51,7 +48,5 @@ namespace OpenMetrics.Services
         public BigInteger Status { get; set; }
         [Parameter("uint256", "timestamp", 4)]
         public BigInteger Timestamp { get; set; }
-        //[Parameter("string", "cid", 4)]
-        //public string Cid { get; set; }
     }
 }

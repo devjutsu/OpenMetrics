@@ -49,7 +49,9 @@ namespace OpenMetrics.Services
 
         [Parameter("uint8", "status", 3)]
         public BigInteger Status { get; set; }
-        [Parameter("string", "cid", 4)]
-        public string Cid { get; set; }
+        [Parameter("uint256", "timestamp", 4)]
+        public BigInteger Timestamp { get; set; }
+        //[Parameter("string", "cid", 4)]
+        //public string Cid { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using Nethereum.Hex.HexConvertors.Extensions
+@using System.Numerics
 @inject IChain Blockchain
 
 @if (Metric != null)
@@ -24,6 +25,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Author</th>
                 <th scope="col">Status</th>
+                <th scope="col">Timestamp</th>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +40,9 @@
                 </td>
                 <td>
                     @rec.StatusText()
+                </td>
+                <td>
+                    @GetTime(rec.Timestamp)
                 </td>
                 @*<td scope="row">
                     @rec.Cid
@@ -58,6 +63,12 @@
     public List<HistoryRecordDTO> History { get; set; }
 
     bool BtnDisabled => Metric.Status == 2;
+    string GetTime(BigInteger timestamp)
+    {
+        var offset = DateTimeOffset.FromUnixTimeMilliseconds((long)timestamp * 1000);
+        return offset.UtcDateTime.ToString();
+        //(ulong)timestamp;
+    }
 
     async Task Approve(Metric metric)
     {

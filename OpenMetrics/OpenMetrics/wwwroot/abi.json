@@ -165,7 +165,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "time",
+            "name": "timestamp",
             "type": "uint256"
           }
         ],
@@ -211,7 +211,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "time",
+            "name": "timestamp",
             "type": "uint256"
           }
         ],
@@ -295,7 +295,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "time",
+            "name": "timestamp",
             "type": "uint256"
           }
         ],

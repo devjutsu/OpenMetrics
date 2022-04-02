@@ -35,7 +35,7 @@ contract OpenMetrics {
         uint256 id;
         address author;
         Status status;
-        uint256 time;
+        uint256 timestamp;
         // string cid;
     }
 
@@ -63,7 +63,7 @@ contract OpenMetrics {
 
             History[metricsCount].records[0].status = Status.Posted;
             History[metricsCount].records[0].author = msg.sender;
-            History[metricsCount].records[0].time = block.timestamp;
+            History[metricsCount].records[0].timestamp = block.timestamp;
             History[metricsCount].count = 1;
 
             metricsCount++;
@@ -90,7 +90,7 @@ contract OpenMetrics {
         for(uint256 i = 0; i < count; i++) {
             records[i].status = History[_id].records[i].status;
             records[i].author = History[_id].records[i].author;
-            records[i].time = History[_id].records[i].time;
+            records[i].timestamp = History[_id].records[i].timestamp;
         }
         return records;
     }
@@ -110,7 +110,7 @@ contract OpenMetrics {
             History[_id].records[count].id = count;
             History[_id].records[count].status = Status.Approved;
             History[_id].records[count].author = msg.sender;
-            History[_id].records[count].time = block.timestamp;
+            History[_id].records[count].timestamp = block.timestamp;
             // History[_id].records[count].cid = History[_id].records[count-1].cid;
 
             History[_id].count = count + 1;
@@ -125,7 +125,7 @@ contract OpenMetrics {
             History[_id].records[count].id = count;
             History[_id].records[count].status = Status.Rejected;
             History[_id].records[count].author = msg.sender;
-            History[_id].records[count].time = block.timestamp;
+            History[_id].records[count].timestamp = block.timestamp;
             // History[_id].records[count].cid = History[_id].records[count-1].cid;
 
             History[_id].count = count + 1;

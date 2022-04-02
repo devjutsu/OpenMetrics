@@ -24,7 +24,7 @@
                     @rec.StatusText()
                 </td>
                 <td>
-                    @GetTime(rec.Timestamp)
+                    @rec.Timestamp.GetTimeString()
                 </td>
             </tr>
         }
@@ -35,10 +35,4 @@
 @code {
     [Parameter]
     public List<HistoryRecordDTO> History { get; set; }
-
-    string GetTime(BigInteger timestamp)
-    {
-        var offset = DateTimeOffset.FromUnixTimeMilliseconds((long)timestamp * 1000);
-        return offset.UtcDateTime.ToString();
-    }
 }

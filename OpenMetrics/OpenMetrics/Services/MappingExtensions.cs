@@ -1,4 +1,5 @@
 ﻿using OpenMetrics.ViewModels;
+using System.Numerics;
 
 namespace OpenMetrics.Services
 {
@@ -28,6 +29,12 @@ namespace OpenMetrics.Services
                 default:
                     return "None";
             }
+        }
+
+        public static string GetTimeString(this BigInteger timestamp)
+        {
+            var offset = DateTimeOffset.FromUnixTimeMilliseconds((long)timestamp * 1000);
+            return offset.UtcDateTime.ToString();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿@using Nethereum.Hex.HexConvertors.Extensions
-@using System.Numerics
 @inject IChain Blockchain
 
 @if (Metric != null)
@@ -15,40 +14,7 @@
     <button class="btn btn-success" @onclick="@(() => Approve(Metric))" disabled=@BtnDisabled>Approve</button>
 
     <p>&nbsp;</p>
-    <HistoryComponent />
-
-
-    <div style="margin-top: 1rem; margin-bottom: 1rem;">
-        <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Author</th>
-                <th scope="col">Status</th>
-                <th scope="col">Timestamp</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var rec in History)
-        {
-            <tr class="">
-                <td scope="row">
-                    @rec.Id
-                </td>
-                <td scope="row">
-                    @rec.Author
-                </td>
-                <td>
-                    @rec.StatusText()
-                </td>
-                <td>
-                    @GetTime(rec.Timestamp)
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-    </div>
+    <HistoryComponent History=History />
 }
 
 @code {
@@ -60,11 +26,7 @@
     public List<HistoryRecordDTO> History { get; set; }
 
     bool BtnDisabled => Metric.Status == 2;
-    string GetTime(BigInteger timestamp)
-    {
-        var offset = DateTimeOffset.FromUnixTimeMilliseconds((long)timestamp * 1000);
-        return offset.UtcDateTime.ToString();
-    }
+    
 
     async Task Approve(Metric metric)
     {

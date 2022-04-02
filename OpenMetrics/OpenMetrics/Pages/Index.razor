@@ -70,21 +70,6 @@ else
     }
 
     <ShowMetricComponent Metric=AppState.SelectedMetric OnApprove=Approve History=CurrentItemHistory />
-
-    @*<button class="btn btn-warning" @onclick="@(() => GetApprovedMetrics())">Get Approved Metrics</button>*@
-
-    @*<div>Verified count: @AppState.ApprovedCount</div>
-        @foreach (var item in AppState.ApprovedIds)
-        {
-        <div>
-        <span>
-        id: @item
-        </span>
-        <span>
-        cid: @AppState.Metrics.FirstOrDefault(o => o.Id == item)?.Cid
-        </span>
-        </div>
-        }*@
 }
 
 @code {

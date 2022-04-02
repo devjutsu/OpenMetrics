@@ -31,19 +31,3 @@ public class GetHistoryRecordCount : FunctionMessage
     [Parameter("uint256", "_id", 1)]
     public BigInteger Id { get; set; }
 }
-
-
-//function approveMetric(uint256 _id) public {
-//[Function("approveMetric", "uint256")]
-//public class ApproveMetricFunction : FunctionMessage
-//{
-//    [Parameter("bytes6", "_invite", 1)] public byte[] Invite { get; set; }
-//}
-
-//[Function("verify", "bool")]
-//public class VerifyFunction : FunctionMessage
-//{
-//    [Parameter("address", "_signer", 1)] public string Signer { get; set; }
-//    [Parameter("bytes6", "_invite", 1)] public byte[] Invite { get; set; }
-//    [Parameter("bytes", "_sig", 1)] public byte[] Sig { get; set; }
-//}

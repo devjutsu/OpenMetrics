@@ -44,9 +44,6 @@
                 <td>
                     @GetTime(rec.Timestamp)
                 </td>
-                @*<td scope="row">
-                    @rec.Cid
-                </td>*@
             </tr>
         }
         </tbody>
@@ -67,7 +64,6 @@
     {
         var offset = DateTimeOffset.FromUnixTimeMilliseconds((long)timestamp * 1000);
         return offset.UtcDateTime.ToString();
-        //(ulong)timestamp;
     }
 
     async Task Approve(Metric metric)

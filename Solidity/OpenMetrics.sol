@@ -32,6 +32,7 @@ contract OpenMetrics {
     }
 
     struct HistoryRecord {
+
         uint256 id;
         address author;
         Status status;
@@ -79,7 +80,6 @@ contract OpenMetrics {
     }
 
     function historyRecord(uint256 _id, uint256 _n) public view returns (HistoryRecord memory) {
-        //return HistoryRecord({status: Status.Posted, author: msg.sender});
         return History[_id].records[_n];
     }
 
@@ -111,7 +111,6 @@ contract OpenMetrics {
             History[_id].records[count].status = Status.Approved;
             History[_id].records[count].author = msg.sender;
             History[_id].records[count].timestamp = block.timestamp;
-            // History[_id].records[count].cid = History[_id].records[count-1].cid;
 
             History[_id].count = count + 1;
         }
@@ -126,7 +125,6 @@ contract OpenMetrics {
             History[_id].records[count].status = Status.Rejected;
             History[_id].records[count].author = msg.sender;
             History[_id].records[count].timestamp = block.timestamp;
-            // History[_id].records[count].cid = History[_id].records[count-1].cid;
 
             History[_id].count = count + 1;
         }

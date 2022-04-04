@@ -1,6 +1,19 @@
 from web3 import Web3
 from web3._utils.events import get_event_data
+import json
+from hexbytes import HexBytes
 
+def toDict(dictToParse):
+    # convert any 'AttributeDict' type found to 'dict'
+    parsedDict = dict(dictToParse)
+    for key, val in parsedDict.items():
+        # check for nested dict structures to iterate through
+        if  'dict' in str(type(val)).lower():
+            parsedDict[key] = toDict(val)
+        # convert 'HexBytes' type to 'str'
+        elif 'HexBytes' in str(type(val)):
+            parsedDict[key] = val.hex()
+    return parsedDict
 
 
 f = open("abi.txt", "r")
@@ -22,4 +35,7 @@ def handle_event(event, event_template):
 for event in events: 
     suc, res = handle_event(event=event, event_template=event_template)   
     if suc:
-        print("Event found", res)
+        print("", res)
+        print()
+        test = toDict(res)
+        print(test["args"]["message"])

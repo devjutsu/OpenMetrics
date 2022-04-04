@@ -1,10 +1,15 @@
 from web3 import Web3
 from web3._utils.events import get_event_data
 
-w3 = Web3(Web3.HTTPProvider("<Infura host>"))
-contract = w3.eth.contract(address="0x33..", abi=abi['abi'])
-event_template = contract.events.<EVENT_NAME>
-events = w3.eth.get_logs({'fromBlock':from_block, 'toBlock': from_block+10000, 'address':"0x33.."})
+
+
+f = open("abi.txt", "r")
+abi = f.read()
+
+w3 = Web3(Web3.HTTPProvider("https://polygon-mumbai.infura.io/v3/b13dfe01d1234fb9a273c558d636d4ea"))
+contract = w3.eth.contract(address="0xA3ad2738d17Eccd72AD9b3B2e51e099F96FAB9C8", abi=abi) #['abi']
+event_template = contract.events.Log
+events = w3.eth.get_logs({'fromBlock':25801255, 'toBlock': 25801300, 'address':"0xA3ad2738d17Eccd72AD9b3B2e51e099F96FAB9C8"})
 
 
 def handle_event(event, event_template):

@@ -20,6 +20,6 @@ def handle_event(event, event_template):
         return False, None
 
 for event in events: 
-    suc, res = self.handle_event(event=event, event_template=event_template)   
+    suc, res = handle_event(event=event, event_template=event_template)   
     if suc:
         print("Event found", res)
